@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MicroHabits AI - Champions 3D Edition</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: { 400: '#818cf8', 500: '#6366f1', 600: '#4f46e5', 700: '#4338ca' },
+                        gold: { 300: '#fde047', 400: '#facc15', 500: '#eab308' }
+                    },
+                    boxShadow: {
+                        '3d-glow': '0 20px 50px -10px rgba(99, 102, 241, 0.4), 0 0 20px rgba(99, 102, 241, 0.2)',
+                        'gold-3d': '0 20px 50px -10px rgba(234, 179, 8, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.4)',
+                        'glass-inset': 'inset 0 1px 1px 0 rgba(255, 255, 255, 0.15)',
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: radial-gradient(circle at 50% 0%, #1e1b4b 0%, #0f172a 60%, #020617 100%);
+            perspective: 1000px;
+        }
+
+        .glass-panel-3d {
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 15px 35px -5px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+            transform-style: preserve-3d;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+
+        .glass-panel-3d:hover {
+            border-color: rgba(99, 102, 241, 0.3);
+        }
+
+        .card-3d-tilt {
+            transform-style: preserve-3d;
+            transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.25s ease;
+        }
+
+        .card-3d-tilt:hover {
+            transform: translateY(-6px) rotateX(4deg) rotateY(-2deg) scale(1.01);
+            box-shadow: 0 20px 40px -10px rgba(99, 102, 241, 0.3);
+        }
+
+        .gold-border-glow {
+            border: 1px solid rgba(234, 179, 8, 0.5);
+            box-shadow: 0 0 30px rgba(234, 179, 8, 0.25), inset 0 0 15px rgba(234, 179, 8, 0.15);
+        }
+
+        .fireworks-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        .btn-3d {
+            transition: all 0.15s ease;
+            box-shadow: 0 6px 0 shadow-color, 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-3d:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0 shadow-color, 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.6);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #4f46e5;
+            border-radius: 9999px;
+        }
+    </style>
+</head>
+<body class="text-slate-100 min-h-screen antialiased selection:bg-indigo-500 selection:text-white pb-36">
+
+    <!-- 3D Canvas Fireworks Overlay -->
+    <canvas id="fireworksCanvas" class="fireworks-canvas"></canvas>
+
+    <!-- Header Navigation -->
+    <header class="sticky top-0 z-40 glass-panel-3d border-b border-slate-800/80 bg-slate-950/80">
+        <div class="max-w-xl mx-auto px-5 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-violet-500 flex items-center justify-center shadow-lg shadow-indigo-500/30 transform hover:rotate-6 transition-transform">
+                    <i class="fa-solid fa-trophy text-amber-300 text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="font-extrabold text-lg tracking-tight text-white flex items-center gap-1.5">
+                        MicroHabits <span class="bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-violet-300">3D AI</span>
+                    </h1>
+                    <span class="text-[11px] text-indigo-300/80 font-medium tracking-wide">Champions Daily Tracker</span>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-2.5">
+                <button id="reminderBellBtn" onclick="toggleReminderModal()" class="w-10 h-10 rounded-xl bg-slate-800/80 border border-slate-700/60 hover:border-amber-500/50 flex items-center justify-center text-slate-300 hover:text-amber-400 transition-all relative">
+                    <i class="fa-solid fa-bell text-sm"></i>
+                    <span id="reminderActiveBadge" class="hidden absolute top-2 right-2 w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
+                </button>
+                <span class="text-xs bg-amber-500/10 text-amber-400 px-3 py-1.5 rounded-xl border border-amber-500/30 font-bold tracking-wider shadow-sm">
+                    CHAMPION
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-xl mx-auto px-5 pt-6 space-y-6">
+
+        <!-- 3D Interactive Day Selector -->
+        <section class="glass-panel-3d rounded-2xl p-4 border border-slate-800">
+            <div class="flex justify-between items-center mb-3 px-1">
+                <span class="text-xs font-extrabold uppercase tracking-wider text-slate-400 flex items-center gap-2">
+                    <i class="fa-regular fa-calendar-days text-indigo-400"></i> Daily Timeline
+                </span>
+                <span id="selectedDayLabel" class="text-xs font-bold text-indigo-400 bg-indigo-500/10 px-2.5 py-0.5 rounded-md border border-indigo-500/20">Monday</span>
+            </div>
+            <div id="daySelector" class="grid grid-cols-7 gap-1.5"></div>
+        </section>
+
+        <!-- Champion Trophy Winner Banner with 3D Fireworks Trigger -->
+        <section id="trophyBanner" class="hidden glass-panel-3d rounded-2xl p-6 gold-border-glow text-center relative overflow-hidden bg-gradient-to-b from-amber-950/60 via-slate-900/90 to-slate-950 transition-all duration-500 card-3d-tilt">
+            <div class="absolute -top-12 -right-12 w-32 h-32 bg-amber-500/20 rounded-full blur-3xl"></div>
+            <div class="inline-flex w-16 h-16 rounded-2xl bg-gradient-to-tr from-amber-500 via-yellow-400 to-amber-200 items-center justify-center text-slate-950 text-3xl shadow-xl shadow-amber-500/50 mb-3 animate-bounce">
+                <i class="fa-solid fa-crown"></i>
+            </div>
+            <h2 class="font-black text-2xl text-amber-300 tracking-tight mb-1 drop-shadow-md">DAILY CHAMPION UNLOCKED!</h2>
+            <p class="text-xs text-slate-200 max-w-sm mx-auto leading-relaxed font-medium mb-3">
+                You hit 100% completion today! Your consistency is forming legendary micro-habits.
+            </p>
+            <button onclick="trigger3DFireworks()" class="bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-950 font-black text-xs px-5 py-2.5 rounded-xl shadow-lg shadow-amber-500/30 hover:brightness-110 active:scale-95 transition">
+                <i class="fa-solid fa-fire text-xs mr-1"></i> LAUNCH 3D FIREWORKS
+            </button>
+        </section>
+
+        <!-- AI Coach & Daily Progress Analysis Box -->
+        <section class="glass-panel-3d rounded-2xl p-5 border border-indigo-500/30 relative overflow-hidden card-3d-tilt">
+            <div class="absolute -right-10 -bottom-10 w-36 h-36 bg-indigo-500/15 rounded-full blur-3xl"></div>
+            
+            <div class="flex items-center justify-between mb-3">
+                <div class="flex items-center gap-2.5">
+                    <span class="flex h-3 w-3 relative">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-3 w-3 bg-indigo-500"></span>
+                    </span>
+                    <h2 class="font-extrabold text-xs uppercase tracking-wider text-indigo-300 flex items-center gap-1.5">
+                        <i class="fa-solid fa-brain"></i> AI Daily Intelligence
+                    </h2>
+                </div>
+                <span id="completionBadge" class="text-xs font-extrabold px-3 py-1 rounded-xl bg-slate-900/80 text-indigo-300 border border-indigo-500/30 shadow-inner">0% Today</span>
+            </div>
+
+            <!-- Daily Analysis Output Container -->
+            <div id="aiAnalysisContainer" class="space-y-3">
+                <p id="aiInsightText" class="text-sm text-slate-200 leading-relaxed font-normal">
+                    Select a day or check off habits below to enable instant AI daily performance evaluation!
+                </p>
+                <div id="aiActionableTips" class="hidden space-y-2 pt-2 border-t border-slate-800">
+                    <!-- Dynamic tips go here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Weekly Performance & 3D Bar Chart -->
+        <section class="glass-panel-3d rounded-2xl p-5 border border-slate-800">
+            <div class="flex justify-between items-center mb-4">
+                <div>
+                    <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-chart-simple text-indigo-400"></i> Weekly Progress Breakdown
+                    </h3>
+                    <p class="text-xs text-slate-400">Historical performance metrics across days</p>
+                </div>
+                <span id="weeklyAvg" class="text-xs font-extrabold text-indigo-400 bg-indigo-500/10 border border-indigo-500/20 px-3 py-1.5 rounded-xl">0% Avg</span>
+            </div>
+            
+            <!-- Bars Chart -->
+            <div id="weeklyChart" class="grid grid-cols-7 gap-2 items-end h-32 pt-4 border-t border-slate-800/80"></div>
+        </section>
+
+        <!-- 7 Core Health & Wellness Pillars -->
+        <section class="space-y-3">
+            <div class="flex justify-between items-center px-1">
+                <h3 class="text-xs font-extrabold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
+                    <i class="fa-solid fa-cubes text-amber-400"></i> 7 Essential Health Pillars
+                </h3>
+                <span class="text-[11px] text-amber-400 font-semibold">Tap to add pillar</span>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <!-- 1. Water -->
+                <div onclick="addPillarHabit('Drink 2.5L pure water', 'water')" class="card-3d-tilt relative h-28 rounded-2xl p-4 flex flex-col justify-end overflow-hidden border border-cyan-500/40 cursor-pointer shadow-lg shadow-cyan-950/40" style="background-image: linear-gradient(to top, rgba(8,47,73,0.95), rgba(8,47,73,0.3)), url('https://images.unsplash.com/photo-1548839140-29a749e1cf4d?auto=format&fit=crop&w=600&q=80')">
+                    <span class="text-[10px] text-cyan-300 font-extrabold uppercase tracking-wider">1. Hydration</span>
+                    <span class="text-sm font-bold text-white">Drink 2.5L Pure Water</span>
+                </div>
+                <!-- 2. Sunlight -->
+                <div onclick="addPillarHabit('15m morning sunlight', 'sunlight')" class="card-3d-tilt relative h-28 rounded-2xl p-4 flex flex-col justify-end overflow-hidden border border-amber-500/40 cursor-pointer shadow-lg shadow-amber-950/40" style="background-image: linear-gradient(to top, rgba(69,26,3,0.95), rgba(69,26,3,0.3)), url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=80')">
+                    <span class="text-[10px] text-amber-300 font-extrabold uppercase tracking-wider">2. Circadian Rhythm</span>
+                    <span class="text-sm font-bold text-white">15m Morning Sunlight</span>
+                </div>
+                <!-- 3. Movement -->
+                <div onclick="addPillarHabit('30m walking or workout', 'movement')" class="card-3d-tilt relative h-28 rounded-2xl p-4 flex flex-col justify-end overflow-hidden border border-emerald-500/40 cursor-pointer shadow-lg shadow-emerald-950/40" style="background-image: linear-gradient(to top, rgba(6,78,59,0.95), rgba(6,78,59,0.3)), url('https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?auto=format&fit=crop&w=600&q=80')">
+                    <span class="text-[10px] text-emerald-300 font-extrabold uppercase tracking-wider">3. Physical Vitality</span>
+                    <span class="text-sm font-bold text-white">30m Movement & Walk</span>
+                </div>
+                <!-- 4. Clean Nutrition -->
+                <div onclick="addPillarHabit('Clean meal & protein focus', 'nutrition')" class="card-3d-tilt relative h-28 rounded-2xl p-4 flex flex-col justify-end overflow-hidden border border-lime-500/40 cursor-pointer shadow-lg shadow-lime-950/40" style="background-image: linear-gradient(to top, rgba(54,83,20,0.95), rgba(54,83,20,0.3)), url('https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=600&q=80')">
+                    <span class="text-[10px] text-lime-300 font-extrabold uppercase tracking-wider">4. Whole Nutrition</span>
+                    <span class="text-sm font-bold text-white">Clean Greens & Protein</span>
+                </div>
+                <!-- 5. Mind Peace -->
+                <div onclick="addPillarHabit('10m breathwork meditation', 'mind')" class="card-3d-tilt relative h-28 rounded-2xl p-4 flex flex-col justify-end overflow-hidden border border-purple-500/40 cursor-pointer shadow-lg shadow-purple-950/40" style="background-image: linear-gradient(to top, rgba(88,28,135,0.95), rgba(88,28,135,0.3)), url('https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=600&q=80')">
+                    <span class="text-[10px] text-purple-300 font-extrabold uppercase tracking-wider">5. Mental Peace</span>
+                    <span class="text-sm font-bold text-white">10m Breathwork & Mind</span>
+                </div>
+                <!-- 6. Knowledge -->
+                <div onclick="addPillarHabit('Read book for 15 minutes', 'reading')" class="card-3d-tilt relative h-28 rounded-2xl p-4 flex flex-col justify-end overflow-hidden border border-indigo-500/40 cursor-pointer shadow-lg shadow-indigo-950/40" style="background-image: linear-gradient(to top, rgba(49,46,129,0.95), rgba(49,46,129,0.3)), url('https://images.unsplash.com/photo-1495640388908-05fa85288e61?auto=format&fit=crop&w=600&q=80')">
+                    <span class="text-[10px] text-indigo-300 font-extrabold uppercase tracking-wider">6. Personal Growth</span>
+                    <span class="text-sm font-bold text-white">Read Book for 15 mins</span>
+                </div>
+                <!-- 7. Sleep -->
+                <div onclick="addPillarHabit('No screens 1 hour before sleep', 'sleep')" class="card-3d-tilt relative h-28 rounded-2xl p-4 flex flex-col justify-end overflow-hidden border border-rose-500/40 cursor-pointer shadow-lg shadow-rose-950/40 sm:col-span-2" style="background-image: linear-gradient(to top, rgba(136,19,55,0.95), rgba(136,19,55,0.3)), url('https://images.unsplash.com/photo-1511295742362-92c96b1fc485?auto=format&fit=crop&w=800&q=80')">
+                    <span class="text-[10px] text-rose-300 font-extrabold uppercase tracking-wider">7. Deep Sleep Protocol</span>
+                    <span class="text-sm font-bold text-white">No Digital Screens 1 hour before sleep</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Custom Habit Creation Form -->
+        <section class="glass-panel-3d rounded-2xl p-2 border border-slate-800">
+            <form id="addHabitForm" class="flex items-center gap-2">
+                <input type="text" id="habitInput" placeholder="Add custom micro-habit..." 
+                    class="bg-transparent border-none rounded-xl px-4 py-3 text-sm w-full focus:outline-none text-slate-100 placeholder-slate-500 font-medium" required>
+                <button type="submit" class="bg-indigo-600 hover:bg-indigo-500 text-white px-5 py-3 rounded-xl font-bold text-sm transition-all shrink-0 flex items-center gap-2 shadow-lg shadow-indigo-600/30 active:scale-95">
+                    <i class="fa-solid fa-plus text-xs"></i> Add Habit
+                </button>
+            </form>
+        </section>
+
+        <!-- Active Micro Habits List -->
+        <section class="space-y-3">
+            <div class="flex justify-between items-center px-1">
+                <h3 class="text-xs font-extrabold uppercase tracking-wider text-slate-400">Daily Challenges</h3>
+                <span id="progressStats" class="text-xs font-bold text-indigo-400">0 / 0 Completed</span>
+            </div>
+            <div id="habitsList" class="space-y-2.5"></div>
+        </section>
+
+    </main>
+
+    <!-- Bottom Sticky AI Bar -->
+    <nav class="fixed bottom-0 left-0 right-0 glass-panel-3d border-t border-slate-800/90 p-4 z-30 bg-slate-950/90">
+        <div class="max-w-xl mx-auto flex gap-3">
+            <button id="getAiAdviceBtn" class="flex-1 bg-gradient-to-r from-indigo-600 via-indigo-500 to-violet-600 hover:brightness-110 text-white font-extrabold py-3.5 rounded-xl shadow-lg shadow-indigo-500/25 transition-all flex items-center justify-center gap-2 text-sm active:scale-[0.98]">
+                <i class="fa-solid fa-wand-magic-sparkles text-amber-300"></i> Generate AI Daily Analysis
+            </button>
+            <button onclick="testNotificationReminder()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 p-3.5 rounded-xl border border-slate-700/80 transition flex items-center justify-center shrink-0" title="Test Notification">
+                <i class="fa-solid fa-paper-plane text-indigo-400"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Notification / Reminder Settings Modal -->
+    <div id="reminderModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-panel-3d max-w-sm w-full rounded-2xl p-6 border border-slate-700 relative">
+            <button onclick="toggleReminderModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-sm">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="flex items-center gap-3 mb-4">
+                <div class="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400">
+                    <i class="fa-solid fa-bell"></i>
+                </div>
+                <div>
+                    <h3 class="font-extrabold text-white text-base">Daily Reminders</h3>
+                    <p class="text-xs text-slate-400">Set your preferred habit notification</p>
+                </div>
+            </div>
+
+            <div class="space-y-4 text-sm">
+                <div class="flex items-center justify-between p-3 rounded-xl bg-slate-900/60 border border-slate-800">
+                    <span class="font-semibold text-slate-200">Enable Reminders</span>
+                    <input type="checkbox" id="reminderToggle" onchange="toggleReminderSwitch()" class="w-5 h-5 accent-indigo-500 rounded cursor-pointer">
+                </div>
+
+                <div class="p-3 rounded-xl bg-slate-900/60 border border-slate-800 space-y-2">
+                    <label class="block text-xs font-bold text-slate-400 uppercase">Reminder Time</label>
+                    <input type="time" id="reminderTimeInput" value="09:00" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-white font-bold focus:outline-none focus:border-indigo-500">
+                </div>
+
+                <button onclick="saveReminderSettings()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 rounded-xl transition shadow-lg shadow-indigo-600/30">
+                    Save Notification Settings
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Application Core Script -->
+    <script>
+        const daysOfWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+        
+        let selectedDayIndex = localStorage.getItem('selectedDayIndex_en') !== null 
+            ? parseInt(localStorage.getItem('selectedDayIndex_en')) 
+            : (new Date().getDay() === 0 ? 6 : new Date().getDay() - 1);
+
+        // Daily Habits Storage structured by day
+        let dailyHabitsData = JSON.parse(localStorage.getItem('microHabits_daily_v2')) || {
+            0: [{ id: 1, title: 'Drink 2.5L pure water', completed: true, streak: 5, category: 'water' }],
+            1: [{ id: 2, title: '15m morning sunlight', completed: true, streak: 3, category: 'sunlight' }],
+            2: [], 3: [], 4: [], 5: [], 6: []
+        };
+
+        let weeklyHistory = JSON.parse(localStorage.getItem('weeklyHistory_en')) || [100, 100, 40, 80, 60, 50, 0];
+        let reminderSettings = JSON.parse(localStorage.getItem('reminderSettings')) || { enabled: false, time: '09:00' };
+
+        const daySelectorEl = document.getElementById('daySelector');
+        const habitsListEl = document.getElementById('habitsList');
+        const habitInput = document.getElementById('habitInput');
+        const progressStatsEl = document.getElementById('progressStats');
+        const aiInsightText = document.getElementById('aiInsightText');
+        const aiActionableTips = document.getElementById('aiActionableTips');
+        const completionBadge = document.getElementById('completionBadge');
+        const weeklyChartEl = document.getElementById('weeklyChart');
+        const weeklyAvgEl = document.getElementById('weeklyAvg');
+        const trophyBanner = document.getElementById('trophyBanner');
+        const selectedDayLabel = document.getElementById('selectedDayLabel');
+
+        // Web Audio API Sound System
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playCheckSound() {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(523.25, audioCtx.currentTime); // C5
+            osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.15); // A5
+            gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.15);
+        }
+
+        function playVictorySound() {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const notes = [523.25, 659.25, 783.99, 1046.50];
+            notes.forEach((freq, idx) => {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime + idx * 0.1);
+                gain.gain.setValueAtTime(0.25, audioCtx.currentTime + idx * 0.1);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + idx * 0.1 + 0.35);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start(audioCtx.currentTime + idx * 0.1);
+                osc.stop(audioCtx.currentTime + idx * 0.1 + 0.35);
+            });
+        }
+
+        // Data Storage Handler
+        function saveData() {
+            localStorage.setItem('microHabits_daily_v2', JSON.stringify(dailyHabitsData));
+            localStorage.setItem('weeklyHistory_en', JSON.stringify(weeklyHistory));
+            localStorage.setItem('selectedDayIndex_en', selectedDayIndex);
+            localStorage.setItem('reminderSettings', JSON.stringify(reminderSettings));
+        }
+
+        // Render Day Selector
+        function renderDaySelector() {
+            daySelectorEl.innerHTML = '';
+            daysOfWeek.forEach((day, index) => {
+                const btn = document.createElement('button');
+                const isSelected = index === selectedDayIndex;
+                btn.type = 'button';
+                btn.className = `py-2.5 rounded-xl text-xs font-extrabold transition-all duration-200 border ${
+                    isSelected 
+                        ? 'bg-gradient-to-b from-indigo-500 to-indigo-700 border-indigo-400 text-white shadow-lg shadow-indigo-600/40 scale-105' 
+                        : 'bg-slate-900/80 border-slate-800 text-slate-400 hover:bg-slate-800'
+                }`;
+                btn.innerText = day;
+                btn.onclick = () => {
+                    selectedDayIndex = index;
+                    selectedDayLabel.innerText = daysOfWeek[index];
+                    saveData();
+                    renderDaySelector();
+                    saveAndRender();
+                    runAiAnalysis();
+                };
+                daySelectorEl.appendChild(btn);
+            });
+        }
+
+        // Update Weekly Breakdown
+        function updateDayInHistory() {
+            const habits = dailyHabitsData[selectedDayIndex] || [];
+            const total = habits.length;
+            const completed = habits.filter(h => h.completed).length;
+            const dayPct = total > 0 ? Math.round((completed / total) * 100) : 0;
+            weeklyHistory[selectedDayIndex] = dayPct;
+            saveData();
+        }
+
+        function renderWeeklyChart() {
+            weeklyChartEl.innerHTML = '';
+            let sum = 0;
+            
+            weeklyHistory.forEach((pct, index) => {
+                sum += pct;
+                const isCurrent = index === selectedDayIndex;
+                const barContainer = document.createElement('div');
+                barContainer.className = 'flex flex-col items-center gap-1.5 h-full justify-end cursor-pointer';
+                barContainer.onclick = () => {
+                    selectedDayIndex = index;
+                    renderDaySelector();
+                    saveAndRender();
+                };
+                
+                barContainer.innerHTML = `
+                    <div class="text-[10px] text-indigo-300 font-extrabold">${pct}%</div>
+                    <div class="w-full bg-slate-900 rounded-t-lg h-full max-h-[80px] flex items-end overflow-hidden p-0.5 border border-slate-800">
+                        <div class="w-full rounded-t-md transition-all duration-500 ${isCurrent ? 'bg-gradient-to-t from-indigo-600 via-indigo-400 to-violet-300' : 'bg-slate-700/80'}" style="height: ${Math.max(pct, 8)}%;"></div>
+                    </div>
+                    <div class="text-[11px] font-bold ${isCurrent ? 'text-indigo-400' : 'text-slate-500'}">${daysOfWeek[index]}</div>
+                `;
+                weeklyChartEl.appendChild(barContainer);
+            });
+
+            const avg = Math.round(sum / 7);
+            weeklyAvgEl.innerText = `${avg}% Avg`;
+        }
+
+        function getHabitColorStyle(category) {
+            switch(category) {
+                case 'water': return 'border-cyan-500/40 bg-cyan-950/30 text-cyan-200';
+                case 'sunlight': return 'border-amber-500/40 bg-amber-950/30 text-amber-200';
+                case 'movement': return 'border-emerald-500/40 bg-emerald-950/30 text-emerald-200';
+                case 'nutrition': return 'border-lime-500/40 bg-lime-950/30 text-lime-200';
+                case 'mind': return 'border-purple-500/40 bg-purple-950/30 text-purple-200';
+                case 'reading': return 'border-indigo-500/40 bg-indigo-950/30 text-indigo-200';
+                case 'sleep': return 'border-rose-500/40 bg-rose-950/30 text-rose-200';
+                default: return 'border-slate-800 bg-slate-900/80 text-slate-100';
+            }
+        }
+
+        function renderHabits() {
+            const habits = dailyHabitsData[selectedDayIndex] || [];
+            habitsListEl.innerHTML = '';
+
+            if (habits.length === 0) {
+                habitsListEl.innerHTML = `
+                    <div class="text-center py-10 glass-panel-3d rounded-2xl border border-slate-800">
+                        <i class="fa-solid fa-list-check text-slate-600 text-3xl mb-2"></i>
+                        <p class="text-slate-400 text-sm font-medium">No habits logged for ${daysOfWeek[selectedDayIndex]}.</p>
+                        <p class="text-slate-500 text-xs mt-1">Tap a 3D health pillar above or create a custom task!</p>
+                    </div>`;
+                return;
+            }
+
+            habits.forEach(habit => {
+                const colorClass = getHabitColorStyle(habit.category);
+                const card = document.createElement('div');
+                card.className = `flex items-center justify-between p-4 rounded-xl border transition-all duration-200 ${
+                    habit.completed 
+                        ? 'opacity-60 bg-slate-900/40 border-slate-800/80 text-slate-500 line-through' 
+                        : `${colorClass} hover:border-indigo-500/50 shadow-md`
+                }`;
+                card.innerHTML = `
+                    <div class="flex items-center gap-3.5 cursor-pointer select-none flex-1" onclick="toggleHabit(${habit.id})">
+                        <div class="w-6 h-6 rounded-lg border transition-all flex items-center justify-center text-xs font-bold ${
+                            habit.completed 
+                                ? 'bg-indigo-600 border-indigo-500 text-white shadow-lg shadow-indigo-600/40' 
+                                : 'border-slate-700 bg-slate-800 text-transparent'
+                        }">
+                            <i class="fa-solid fa-check"></i>
+                        </div>
+                        <span class="text-sm font-semibold tracking-wide ${habit.completed ? 'text-slate-500' : ''}">${habit.title}</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span class="text-xs bg-slate-900/90 px-2.5 py-1 rounded-lg text-amber-400 border border-slate-700/60 flex items-center gap-1.5 font-bold">
+                            <i class="fa-solid fa-fire text-amber-500 text-xs"></i> ${habit.streak}d
+                        </span>
+                        <button onclick="deleteHabit(${habit.id})" class="text-slate-500 hover:text-rose-400 text-xs p-1.5 transition">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </div>
+                `;
+                habitsListEl.appendChild(card);
+            });
+        }
+
+        let trophyPlayed = false;
+
+        function updateStats() {
+            const habits = dailyHabitsData[selectedDayIndex] || [];
+            const completedCount = habits.filter(h => h.completed).length;
+            const total = habits.length;
+            const pct = total > 0 ? Math.round((completedCount / total) * 100) : 0;
+            
+            progressStatsEl.innerText = `${completedCount} / ${total} Completed`;
+            completionBadge.innerText = `${pct}% for ${daysOfWeek[selectedDayIndex]}`;
+
+            updateDayInHistory();
+            renderWeeklyChart();
+
+            if (total > 0 && pct === 100) {
+                trophyBanner.classList.remove('hidden');
+                if (!trophyPlayed) {
+                    playVictorySound();
+                    trigger3DFireworks();
+                    trophyPlayed = true;
+                }
+            } else {
+                trophyBanner.classList.add('hidden');
+                trophyPlayed = false;
+            }
+        }
+
+        function saveAndRender() {
+            saveData();
+            renderHabits();
+            updateStats();
+        }
+
+        // Custom Habit Handler
+        document.getElementById('addHabitForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const title = habitInput.value.trim();
+            if (!title) return;
+            
+            if (!dailyHabitsData[selectedDayIndex]) dailyHabitsData[selectedDayIndex] = [];
+            dailyHabitsData[selectedDayIndex].push({ id: Date.now(), title: title, completed: false, streak: 1, category: 'custom' });
+            habitInput.value = '';
+            saveAndRender();
+        });
+
+        window.addPillarHabit = function(titleText, categoryKey) {
+            if (!dailyHabitsData[selectedDayIndex]) dailyHabitsData[selectedDayIndex] = [];
+            const habits = dailyHabitsData[selectedDayIndex];
+            
+            if (habits.some(h => h.title.toLowerCase() === titleText.toLowerCase())) return;
+            habits.push({ id: Date.now(), title: titleText, completed: false, streak: 1, category: categoryKey });
+            playCheckSound();
+            saveAndRender();
+        };
+
+        window.toggleHabit = function(id) {
+            const habits = dailyHabitsData[selectedDayIndex] || [];
+            dailyHabitsData[selectedDayIndex] = habits.map(h => {
+                if (h.id === id) {
+                    const newStatus = !h.completed;
+                    if (newStatus) playCheckSound();
+                    return { ...h, completed: newStatus, streak: newStatus ? h.streak + 1 : Math.max(0, h.streak - 1) };
+                }
+                return h;
+            });
+            saveAndRender();
+        };
+
+        window.deleteHabit = function(id) {
+            const habits = dailyHabitsData[selectedDayIndex] || [];
+            dailyHabitsData[selectedDayIndex] = habits.filter(h => h.id !== id);
+            saveAndRender();
+        };
+
+        // AI Daily Progress Analysis Logic
+        function runAiAnalysis() {
+            const habits = dailyHabitsData[selectedDayIndex] || [];
+            const completed = habits.filter(h => h.completed).length;
+            const total = habits.length;
+            const pct = total > 0 ? Math.round((completed / total) * 100) : 0;
+            
+            let summary = "";
+            let tips = [];
+
+            if (total === 0) {
+                summary = `No activities recorded for ${daysOfWeek[selectedDayIndex]}. Select from the health pillars above to begin building consistency!`;
+            } else if (pct === 100) {
+                summary = `Outstanding execution for ${daysOfWeek[selectedDayIndex]}! You completed all ${total} micro-habits. Discipline is your superpower!`;
+                tips = [
+                    "Maintain hydration levels for smooth muscle recovery.",
+                    "Log off digital devices early to protect sleep quality."
+                ];
+            } else if (pct >= 50) {
+                summary = `Strong progress on ${daysOfWeek[selectedDayIndex]} (${pct}% completed). You completed ${completed} out of ${total} challenges.`;
+                tips = [
+                    "Complete remaining pillars to claim today's Champion Trophy.",
+                    "Take a quick 10-minute walk to recharge energy."
+                ];
+            } else {
+                summary = `Building momentum for ${daysOfWeek[selectedDayIndex]}. You completed ${completed} of ${total} micro-habits. Small steps bring massive wins!`;
+                tips = [
+                    "Start with the easiest habit to build immediate momentum.",
+                    "Drink a glass of water right now to boost focus."
+                ];
+            }
+
+            aiInsightText.innerText = summary;
+            
+            if (tips.length > 0) {
+                aiActionableTips.classList.remove('hidden');
+                aiActionableTips.innerHTML = tips.map(t => `
+                    <div class="flex items-center gap-2 text-xs text-indigo-200">
+                        <i class="fa-solid fa-circle-check text-amber-400"></i> ${t}
+                    </div>
+                `).join('');
+            } else {
+                aiActionableTips.classList.add('hidden');
+            }
+        }
+
+        document.getElementById('getAiAdviceBtn').addEventListener('click', () => {
+            aiInsightText.innerHTML = `<span class="animate-pulse text-indigo-400 font-bold"><i class="fa-solid fa-gear fa-spin"></i> Analyzing daily metrics for ${daysOfWeek[selectedDayIndex]}...</span>`;
+            aiActionableTips.classList.add('hidden');
+            setTimeout(runAiAnalysis, 600);
+        });
+
+        // Reminders & Notifications System
+        function toggleReminderModal() {
+            const modal = document.getElementById('reminderModal');
+            modal.classList.toggle('hidden');
+            document.getElementById('reminderToggle').checked = reminderSettings.enabled;
+            document.getElementById('reminderTimeInput').value = reminderSettings.time;
+        }
+
+        function toggleReminderSwitch() {
+            reminderSettings.enabled = document.getElementById('reminderToggle').checked;
+            updateReminderBadge();
+        }
+
+        function saveReminderSettings() {
+            reminderSettings.enabled = document.getElementById('reminderToggle').checked;
+            reminderSettings.time = document.getElementById('reminderTimeInput').value;
+            saveData();
+            updateReminderBadge();
+            toggleReminderModal();
+
+            if (reminderSettings.enabled && "Notification" in window) {
+                Notification.requestPermission();
+            }
+        }
+
+        function updateReminderBadge() {
+            const badge = document.getElementById('reminderActiveBadge');
+            if (reminderSettings.enabled) badge.classList.remove('hidden');
+            else badge.classList.add('hidden');
+        }
+
+        function testNotificationReminder() {
+            if ("Notification" in window) {
+                Notification.requestPermission().then(permission => {
+                    if (permission === "granted") {
+                        new Notification("MicroHabits AI Champion", {
+                            body: "Time to complete your daily habits and keep your streak alive!",
+                            icon: "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
+                        });
+                    } else {
+                        alert("Please enable notification permissions in your browser.");
+                    }
+                });
+            } else {
+                alert("Notifications are not supported in this browser.");
+            }
+        }
+
+        // 3D Canvas Particle Fireworks Engine
+        const canvas = document.getElementById('fireworksCanvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor(x, y, color) {
+                this.x = x;
+                this.y = y;
+                this.color = color;
+                const angle = Math.random() * Math.PI * 2;
+                const speed = Math.random() * 8 + 2;
+                this.vx = Math.cos(angle) * speed;
+                this.vy = Math.sin(angle) * speed;
+                this.alpha = 1;
+                this.decay = Math.random() * 0.02 + 0.015;
+                this.gravity = 0.12;
+            }
+
+            update() {
+                this.vx *= 0.98;
+                this.vy *= 0.98;
+                this.vy += this.gravity;
+                this.x += this.vx;
+                this.y += this.vy;
+                this.alpha -= this.decay;
+            }
+
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = Math.max(0, this.alpha);
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, 3, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = this.color;
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        function trigger3DFireworks() {
+            const colors = ['#facc15', '#6366f1', '#ec4899', '#10b981', '#3b82f6'];
+            const burstCount = 5;
+
+            for (let i = 0; i < burstCount; i++) {
+                setTimeout(() => {
+                    const x = Math.random() * canvas.width * 0.8 + canvas.width * 0.1;
+                    const y = Math.random() * canvas.height * 0.5 + canvas.height * 0.1;
+                    const color = colors[Math.floor(Math.random() * colors.length)];
+                    for (let p = 0; p < 60; p++) {
+                        particles.push(new Particle(x, y, color));
+                    }
+                }, i * 200);
+            }
+        }
+
+        function animateFireworks() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles = particles.filter(p => p.alpha > 0);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animateFireworks);
+        }
+
+        window.onload = function() {
+            renderDaySelector();
+            saveAndRender();
+            runAiAnalysis();
+            updateReminderBadge();
+            animateFireworks();
+        };
+    </script>
+</body>
+</html>
