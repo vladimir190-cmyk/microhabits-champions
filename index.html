@@ -96,6 +96,91 @@
             background: #4f46e5;
             border-radius: 9999px;
         }
+        .ai-roast-card {
+    background: rgba(25, 25, 35, 0.7);
+    border: 1px solid rgba(255, 25, 120, 0.3);
+    border-radius: 16px;
+    padding: 20px;
+    margin: 20px 0;
+    backdrop-filter: blur(12px);
+    color: #ffffff;
+    font-family: inherit;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+.roast-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.personality-selector {
+    display: flex;
+    gap: 8px;
+}
+
+.mode-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: #aaa;
+    padding: 6px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.mode-btn.active {
+    background: #ff2a6d;
+    color: #fff;
+    box-shadow: 0 0 10px rgba(255, 42, 109, 0.5);
+}
+
+.roast-body {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    border-left: 4px solid #ff2a6d;
+}
+
+.roast-text {
+    font-size: 1rem;
+    line-height: 1.5;
+    margin: 0;
+    font-style: italic;
+}
+
+.roast-footer {
+    display: flex;
+    gap: 10px;
+}
+
+.cyber-button, .share-button {
+    padding: 10px 16px;
+    border-radius: 8px;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.cyber-button {
+    background: linear-gradient(135deg, #ff2a6d, #7928ca);
+    color: white;
+    flex: 1;
+}
+
+.share-button {
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+}
+
+.cyber-button:hover, .share-button:hover {
+    transform: translateY(-2px);
+}
     </style>
     <script data-goatcounter="https://microhabits-champions.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </head>
@@ -784,6 +869,66 @@
     .catch(() => {
       document.getElementById('visit-count').innerText = '1';
     });
+
+    // Hlášky pre AI Roast & Toast
+const aiQuotes = {
+    toast: [
+        "Skvelá práca! S takýmto tempom zničíš každú prokrastináciu.",
+        "Malý krok pre teba, obrovský skok pre tvoj 3D habit streak! Len tak ďalej.",
+        "Dnes ideš ako hodinky. Tvoj budúci ja ti za tento deň poďakuje.",
+        "Sústredenie na jednotku s hviezdičkou. Si nezastaviteľný!"
+    ],
+    roast: [
+        "Vážne? Včera veľké reči a dnes zatiaľ nič? Klávesnica plače v kúte.",
+        "Tvoja prokrastinácia má vyšší level než tvoj postava v hre. Pohni kostrou!",
+        "Ak budeš takto pokračovať, AI tréner ti vypne prístup k internetu.",
+        "Hovoríš, že 'začneš o chvíľu'? Čakáš, kým skončí vesmír?"
+    ]
+};
+
+let currentMode = 'toast';
+
+// Prepínanie režimov Roast vs Toast
+document.querySelectorAll('.mode-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+        document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+        e.target.classList.add('active');
+        currentMode = e.target.getAttribute('data-mode');
+        generateNewQuote();
+    });
+});
+
+// Generovanie hlášky
+function generateNewQuote() {
+    const quotesArray = aiQuotes[currentMode];
+    const randomIndex = Math.floor(Math.random() * quotesArray.length);
+    const messageElement = document.getElementById('ai-message');
+    
+    // Malý efekt prebliknutia pri zmene
+    messageElement.style.opacity = 0;
+    setTimeout(() => {
+        messageElement.textContent = `„${quotesArray[randomIndex]}“`;
+        messageElement.style.opacity = 1;
+    }, 150);
+}
+
+document.getElementById('generate-btn').addEventListener('click', generateNewQuote);
+
+// Funkcia na simuláciu zdieľania (skopírovanie hlášky do schránky pre sociálne siete)
+document.getElementById('share-btn').addEventListener('click', () => {
+    const textToShare = document.getElementById('ai-message').textContent + " — MicroHabits AI Champions 3D Edition 🚀";
+    navigator.clipboard.writeText(textToShare).then(() => {
+        const shareBtn = document.getElementById('share-btn');
+        const originalText = shareBtn.textContent;
+        shareBtn.textContent = "✅ Skopírované!";
+        setTimeout(() => {
+            shareBtn.textContent = originalText;
+        }, 2000);
+    });
+});
+
+// Pridanie prechodového efektu pre text v CSS cez JS
+document.getElementById('ai-message').style.transition = 'opacity 0.15s ease-in-out';
 </script>
     <!-- AI Roast & Toast Modul -->
 <div class="ai-roast-card glassmorphism-panel">
