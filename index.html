@@ -75,16 +75,6 @@
             z-index: 100;
         }
 
-        .btn-3d {
-            transition: all 0.15s ease;
-            box-shadow: 0 6px 0 shadow-color, 0 10px 20px rgba(0, 0, 0, 0.3);
-        }
-
-        .btn-3d:active {
-            transform: translateY(4px);
-            box-shadow: 0 2px 0 shadow-color, 0 4px 10px rgba(0, 0, 0, 0.3);
-        }
-
         /* Custom Scrollbar */
         ::-webkit-scrollbar {
             width: 6px;
@@ -96,91 +86,93 @@
             background: #4f46e5;
             border-radius: 9999px;
         }
+
+        /* AI Roast & Toast Styles */
         .ai-roast-card {
-    background: rgba(25, 25, 35, 0.7);
-    border: 1px solid rgba(255, 25, 120, 0.3);
-    border-radius: 16px;
-    padding: 20px;
-    margin: 20px 0;
-    backdrop-filter: blur(12px);
-    color: #ffffff;
-    font-family: inherit;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-}
+            background: rgba(25, 25, 35, 0.7);
+            border: 1px solid rgba(255, 25, 120, 0.3);
+            border-radius: 16px;
+            padding: 20px;
+            margin: 20px 0;
+            backdrop-filter: blur(12px);
+            color: #ffffff;
+            font-family: inherit;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        }
 
-.roast-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
-    flex-wrap: wrap;
-    gap: 10px;
-}
+        .roast-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
 
-.personality-selector {
-    display: flex;
-    gap: 8px;
-}
+        .personality-selector {
+            display: flex;
+            gap: 8px;
+        }
 
-.mode-btn {
-    background: rgba(255, 255, 255, 0.1);
-    border: none;
-    color: #aaa;
-    padding: 6px 12px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
+        .mode-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: #aaa;
+            padding: 6px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
 
-.mode-btn.active {
-    background: #ff2a6d;
-    color: #fff;
-    box-shadow: 0 0 10px rgba(255, 42, 109, 0.5);
-}
+        .mode-btn.active {
+            background: #ff2a6d;
+            color: #fff;
+            box-shadow: 0 0 10px rgba(255, 42, 109, 0.5);
+        }
 
-.roast-body {
-    background: rgba(0, 0, 0, 0.3);
-    padding: 15px;
-    border-radius: 10px;
-    margin-bottom: 15px;
-    border-left: 4px solid #ff2a6d;
-}
+        .roast-body {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border-left: 4px solid #ff2a6d;
+        }
 
-.roast-text {
-    font-size: 1rem;
-    line-height: 1.5;
-    margin: 0;
-    font-style: italic;
-}
+        .roast-text {
+            font-size: 1rem;
+            line-height: 1.5;
+            margin: 0;
+            font-style: italic;
+        }
 
-.roast-footer {
-    display: flex;
-    gap: 10px;
-}
+        .roast-footer {
+            display: flex;
+            gap: 10px;
+        }
 
-.cyber-button, .share-button {
-    padding: 10px 16px;
-    border-radius: 8px;
-    border: none;
-    font-weight: bold;
-    cursor: pointer;
-    transition: transform 0.2s;
-}
+        .cyber-button, .share-button {
+            padding: 10px 16px;
+            border-radius: 8px;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
 
-.cyber-button {
-    background: linear-gradient(135deg, #ff2a6d, #7928ca);
-    color: white;
-    flex: 1;
-}
+        .cyber-button {
+            background: linear-gradient(135deg, #ff2a6d, #7928ca);
+            color: white;
+            flex: 1;
+        }
 
-.share-button {
-    background: rgba(255, 255, 255, 0.15);
-    color: white;
-}
+        .share-button {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+        }
 
-.cyber-button:hover, .share-button:hover {
-    transform: translateY(-2px);
-}
+        .cyber-button:hover, .share-button:hover {
+            transform: translateY(-2px);
+        }
     </style>
     <script data-goatcounter="https://microhabits-champions.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </head>
@@ -272,6 +264,26 @@
             </div>
         </section>
 
+        <!-- AI Roast & Toast Modul -->
+        <div class="ai-roast-card glass-panel-3d">
+            <div class="roast-header">
+                <h3 class="font-extrabold text-xs uppercase tracking-wider text-pink-400 flex items-center gap-1.5"><i class="fa-solid fa-robot"></i> AI Coach: Roast & Toast</h3>
+                <div class="personality-selector">
+                    <button type="button" class="mode-btn active" data-mode="toast">🍞 Toast</button>
+                    <button type="button" class="mode-btn" data-mode="roast">🔥 Roast</button>
+                </div>
+            </div>
+            
+            <div class="roast-body">
+                <p id="ai-message" class="roast-text">„Vitaj v aréne! Pripravený pokoriť dnešné návyky alebo budeš zase plakať v kúte?“</p>
+            </div>
+
+            <div class="roast-footer">
+                <button type="button" id="generate-btn" class="cyber-button">Vygenerovať hlášku</button>
+                <button type="button" id="share-btn" class="share-button">📸 Zdieľať</button>
+            </div>
+        </div>
+
         <!-- Weekly Performance & 3D Bar Chart -->
         <section class="glass-panel-3d rounded-2xl p-5 border border-slate-800">
             <div class="flex justify-between items-center mb-4">
@@ -355,6 +367,11 @@
             <div id="habitsList" class="space-y-2.5"></div>
         </section>
 
+        <!-- Počítadlo návštevnosti -->
+        <div style="text-align: center; margin-top: 20px; font-size: 0.9rem; opacity: 0.8; color: #fff;">
+          👁️ Počet návštev: <span id="visit-count">...</span>
+        </div>
+
     </main>
 
     <!-- Bottom Sticky AI Bar -->
@@ -411,7 +428,6 @@
             ? parseInt(localStorage.getItem('selectedDayIndex_en')) 
             : (new Date().getDay() === 0 ? 6 : new Date().getDay() - 1);
 
-        // Daily Habits Storage structured by day
         let dailyHabitsData = JSON.parse(localStorage.getItem('microHabits_daily_v2')) || {
             0: [{ id: 1, title: 'Drink 2.5L pure water', completed: true, streak: 5, category: 'water' }],
             1: [{ id: 2, title: '15m morning sunlight', completed: true, streak: 3, category: 'sunlight' }],
@@ -433,7 +449,6 @@
         const trophyBanner = document.getElementById('trophyBanner');
         const selectedDayLabel = document.getElementById('selectedDayLabel');
 
-        // Web Audio API Sound System
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
         function playCheckSound() {
@@ -441,8 +456,8 @@
             const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
             osc.type = 'sine';
-            osc.frequency.setValueAtTime(523.25, audioCtx.currentTime); // C5
-            osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.15); // A5
+            osc.frequency.setValueAtTime(523.25, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.15);
             gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
             gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
             osc.connect(gain);
@@ -468,7 +483,6 @@
             });
         }
 
-        // Data Storage Handler
         function saveData() {
             localStorage.setItem('microHabits_daily_v2', JSON.stringify(dailyHabitsData));
             localStorage.setItem('weeklyHistory_en', JSON.stringify(weeklyHistory));
@@ -476,7 +490,6 @@
             localStorage.setItem('reminderSettings', JSON.stringify(reminderSettings));
         }
 
-        // Render Day Selector
         function renderDaySelector() {
             daySelectorEl.innerHTML = '';
             daysOfWeek.forEach((day, index) => {
@@ -501,7 +514,6 @@
             });
         }
 
-        // Update Weekly Breakdown
         function updateDayInHistory() {
             const habits = dailyHabitsData[selectedDayIndex] || [];
             const total = habits.length;
@@ -588,7 +600,7 @@
                     </div>
                     <div class="flex items-center gap-3">
                         <span class="text-xs bg-slate-900/90 px-2.5 py-1 rounded-lg text-amber-400 border border-slate-700/60 flex items-center gap-1.5 font-bold">
-                            <i class="fa-solid fa-fire text-amber-500 text-xs"></i> ${habit.streak}d
+                            <i class="fa-solid fa-fire text-amber-500 text-xs"></i> ${habit.streak || 1}d
                         </span>
                         <button onclick="deleteHabit(${habit.id})" class="text-slate-500 hover:text-rose-400 text-xs p-1.5 transition">
                             <i class="fa-solid fa-trash-can"></i>
@@ -632,7 +644,6 @@
             updateStats();
         }
 
-        // Custom Habit Handler
         document.getElementById('addHabitForm').addEventListener('submit', (e) => {
             e.preventDefault();
             const title = habitInput.value.trim();
@@ -641,7 +652,9 @@
             if (!dailyHabitsData[selectedDayIndex]) dailyHabitsData[selectedDayIndex] = [];
             dailyHabitsData[selectedDayIndex].push({ id: Date.now(), title: title, completed: false, streak: 1, category: 'custom' });
             habitInput.value = '';
+            playCheckSound();
             saveAndRender();
+            runAiAnalysis();
         });
 
         window.addPillarHabit = function(titleText, categoryKey) {
@@ -652,6 +665,7 @@
             habits.push({ id: Date.now(), title: titleText, completed: false, streak: 1, category: categoryKey });
             playCheckSound();
             saveAndRender();
+            runAiAnalysis();
         };
 
         window.toggleHabit = function(id) {
@@ -660,20 +674,21 @@
                 if (h.id === id) {
                     const newStatus = !h.completed;
                     if (newStatus) playCheckSound();
-                    return { ...h, completed: newStatus, streak: newStatus ? h.streak + 1 : Math.max(0, h.streak - 1) };
+                    return { ...h, completed: newStatus, streak: newStatus ? h.streak + 1 : Math.max(1, h.streak - 1) };
                 }
                 return h;
             });
             saveAndRender();
+            runAiAnalysis();
         };
 
         window.deleteHabit = function(id) {
             const habits = dailyHabitsData[selectedDayIndex] || [];
             dailyHabitsData[selectedDayIndex] = habits.filter(h => h.id !== id);
             saveAndRender();
+            runAiAnalysis();
         };
 
-        // AI Daily Progress Analysis Logic
         function runAiAnalysis() {
             const habits = dailyHabitsData[selectedDayIndex] || [];
             const completed = habits.filter(h => h.completed).length;
@@ -687,22 +702,13 @@
                 summary = `No activities recorded for ${daysOfWeek[selectedDayIndex]}. Select from the health pillars above to begin building consistency!`;
             } else if (pct === 100) {
                 summary = `Outstanding execution for ${daysOfWeek[selectedDayIndex]}! You completed all ${total} micro-habits. Discipline is your superpower!`;
-                tips = [
-                    "Maintain hydration levels for smooth muscle recovery.",
-                    "Log off digital devices early to protect sleep quality."
-                ];
+                tips = ["Maintain hydration levels for smooth muscle recovery.", "Log off digital devices early to protect sleep quality."];
             } else if (pct >= 50) {
                 summary = `Strong progress on ${daysOfWeek[selectedDayIndex]} (${pct}% completed). You completed ${completed} out of ${total} challenges.`;
-                tips = [
-                    "Complete remaining pillars to claim today's Champion Trophy.",
-                    "Take a quick 10-minute walk to recharge energy."
-                ];
+                tips = ["Complete remaining pillars to claim today's Champion Trophy.", "Take a quick 10-minute walk to recharge energy."];
             } else {
                 summary = `Building momentum for ${daysOfWeek[selectedDayIndex]}. You completed ${completed} of ${total} micro-habits. Small steps bring massive wins!`;
-                tips = [
-                    "Start with the easiest habit to build immediate momentum.",
-                    "Drink a glass of water right now to boost focus."
-                ];
+                tips = ["Start with the easiest habit to build immediate momentum.", "Drink a glass of water right now to boost focus."];
             }
 
             aiInsightText.innerText = summary;
@@ -724,6 +730,61 @@
             aiActionableTips.classList.add('hidden');
             setTimeout(runAiAnalysis, 600);
         });
+
+        // AI Roast & Toast Logic
+        const aiQuotes = {
+            toast: [
+                "Skvelá práca! S takýmto tempom zničíš každú prokrastináciu.",
+                "Malý krok pre teba, obrovský skok pre tvoj 3D habit streak! Len tak ďalej.",
+                "Dnes ideš ako hodinky. Tvoj budúci ja ti za tento deň poďakuje.",
+                "Sústredenie na jednotku s hviezdičkou. Si nezastaviteľný!"
+            ],
+            roast: [
+                "Vážne? Včera veľké reči a dnes zatiaľ nič? Klávesnica plače v kúte.",
+                "Tvoja prokrastinácia má vyšší level než tvoja postava v hre. Pohni kostrou!",
+                "Ak budeš takto pokračovať, AI tréner ti vypne prístup k internetu.",
+                "Hovoríš, že 'začneš o chvíľu'? Čakáš, kým skončí vesmír?"
+            ]
+        };
+
+        let currentMode = 'toast';
+
+        document.querySelectorAll('.mode-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+                e.currentTarget.classList.add('active');
+                currentMode = e.currentTarget.getAttribute('data-mode');
+                generateNewQuote();
+            });
+        });
+
+        function generateNewQuote() {
+            const quotesArray = aiQuotes[currentMode];
+            const randomIndex = Math.floor(Math.random() * quotesArray.length);
+            const messageElement = document.getElementById('ai-message');
+            
+            messageElement.style.opacity = 0;
+            setTimeout(() => {
+                messageElement.textContent = `„${quotesArray[randomIndex]}“`;
+                messageElement.style.opacity = 1;
+            }, 150);
+        }
+
+        document.getElementById('generate-btn').addEventListener('click', generateNewQuote);
+
+        document.getElementById('share-btn').addEventListener('click', () => {
+            const textToShare = document.getElementById('ai-message').textContent + " — MicroHabits AI Champions 3D Edition 🚀";
+            navigator.clipboard.writeText(textToShare).then(() => {
+                const shareBtn = document.getElementById('share-btn');
+                const originalText = shareBtn.textContent;
+                shareBtn.textContent = "✅ Skopírované!";
+                setTimeout(() => {
+                    shareBtn.textContent = originalText;
+                }, 2000);
+            });
+        });
+
+        document.getElementById('ai-message').style.transition = 'opacity 0.15s ease-in-out';
 
         // Reminders & Notifications System
         function toggleReminderModal() {
@@ -855,99 +916,17 @@
             animateFireworks();
         };
     </script>
-    <!-- Počítadlo návštevnosti -->
-<div style="text-align: center; margin-top: 20px; font-size: 0.9rem; opacity: 0.8; color: #fff;">
-  👁️ Počet návštev: <span id="visit-count">...</span>
-</div>
 
-<script>
-  fetch('https://api.countapi.xyz/hit/microhabits-champions-vladimir190/visits')
-    .then(res => res.json())
-    .then(res => {
-      document.getElementById('visit-count').innerText = res.value;
-    })
-    .catch(() => {
-      document.getElementById('visit-count').innerText = '1';
-    });
-
-    // Hlášky pre AI Roast & Toast
-const aiQuotes = {
-    toast: [
-        "Skvelá práca! S takýmto tempom zničíš každú prokrastináciu.",
-        "Malý krok pre teba, obrovský skok pre tvoj 3D habit streak! Len tak ďalej.",
-        "Dnes ideš ako hodinky. Tvoj budúci ja ti za tento deň poďakuje.",
-        "Sústredenie na jednotku s hviezdičkou. Si nezastaviteľný!"
-    ],
-    roast: [
-        "Vážne? Včera veľké reči a dnes zatiaľ nič? Klávesnica plače v kúte.",
-        "Tvoja prokrastinácia má vyšší level než tvoj postava v hre. Pohni kostrou!",
-        "Ak budeš takto pokračovať, AI tréner ti vypne prístup k internetu.",
-        "Hovoríš, že 'začneš o chvíľu'? Čakáš, kým skončí vesmír?"
-    ]
-};
-
-let currentMode = 'toast';
-
-// Prepínanie režimov Roast vs Toast
-document.querySelectorAll('.mode-btn').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-        document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
-        e.target.classList.add('active');
-        currentMode = e.target.getAttribute('data-mode');
-        generateNewQuote();
-    });
-});
-
-// Generovanie hlášky
-function generateNewQuote() {
-    const quotesArray = aiQuotes[currentMode];
-    const randomIndex = Math.floor(Math.random() * quotesArray.length);
-    const messageElement = document.getElementById('ai-message');
-    
-    // Malý efekt prebliknutia pri zmene
-    messageElement.style.opacity = 0;
-    setTimeout(() => {
-        messageElement.textContent = `„${quotesArray[randomIndex]}“`;
-        messageElement.style.opacity = 1;
-    }, 150);
-}
-
-document.getElementById('generate-btn').addEventListener('click', generateNewQuote);
-
-// Funkcia na simuláciu zdieľania (skopírovanie hlášky do schránky pre sociálne siete)
-document.getElementById('share-btn').addEventListener('click', () => {
-    const textToShare = document.getElementById('ai-message').textContent + " — MicroHabits AI Champions 3D Edition 🚀";
-    navigator.clipboard.writeText(textToShare).then(() => {
-        const shareBtn = document.getElementById('share-btn');
-        const originalText = shareBtn.textContent;
-        shareBtn.textContent = "✅ Skopírované!";
-        setTimeout(() => {
-            shareBtn.textContent = originalText;
-        }, 2000);
-    });
-});
-
-// Pridanie prechodového efektu pre text v CSS cez JS
-document.getElementById('ai-message').style.transition = 'opacity 0.15s ease-in-out';
-</script>
-    <!-- AI Roast & Toast Modul -->
-<div class="ai-roast-card glassmorphism-panel">
-    <div class="roast-header">
-        <h3>🤖 AI Coach: Roast & Toast</h3>
-        <div class="personality-selector">
-            <button class="mode-btn active" data-mode="toast">🍞 Toast (Motivátor)</button>
-            <button class="mode-btn" data-mode="roast">🔥 Roast (Drsný tréner)</button>
-        </div>
-    </div>
-    
-    <div class="roast-body">
-        <p id="ai-message" class="roast-text">„Vitaj v aréne! Pripravený pokoriť dnešné návyky alebo budeš zase plakať v kúte?“</p>
-    </div>
-
-    <div class="roast-footer">
-        <button id="generate-btn" class="cyber-button">Vygenerovať hlášku</button>
-        <button id="share-btn" class="share-button">📸 Zdieľať hlášku</button>
-    </div>
-</div>
+    <!-- Počítadlo návštevnosti skript -->
+    <script>
+      fetch('https://api.countapi.xyz/hit/microhabits-champions-vladimir190/visits')
+        .then(res => res.json())
+        .then(res => {
+          document.getElementById('visit-count').innerText = res.value;
+        })
+        .catch(() => {
+          document.getElementById('visit-count').innerText = '1';
+        });
+    </script>
 </body>
 </html>
