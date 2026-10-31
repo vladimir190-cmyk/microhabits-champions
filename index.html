@@ -28,6 +28,8 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- html2canvas pre sťahovanie certifikátu ako obrázok -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     
     <style>
         body { 
@@ -432,33 +434,39 @@
                 <i class="fa-solid fa-xmark"></i>
             </button>
             
-            <div class="inline-flex w-16 h-16 rounded-2xl bg-gradient-to-tr from-amber-500 via-yellow-400 to-amber-200 items-center justify-center text-slate-950 text-3xl shadow-xl shadow-amber-500/50 mb-1">
-                <i class="fa-solid fa-certificate"></i>
-            </div>
-            
-            <div>
-                <h3 class="font-black text-xl text-amber-300 tracking-tight">CHAMPION CERTIFICATE</h3>
-                <p class="text-xs text-indigo-200">MicroHabits AI – 3D Glassmorphism Edition</p>
-            </div>
+            <!-- Tento prvok bude exportovaný ako samostatný obrázok PNG -->
+            <div id="certificateCardPreview" class="p-6 rounded-2xl bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-950 border-2 border-amber-500/60 text-left space-y-4 shadow-2xl relative overflow-hidden">
+                <div class="absolute -top-10 -right-10 w-28 h-28 bg-amber-500/20 rounded-full blur-2xl"></div>
+                
+                <div class="flex justify-between items-center text-[11px] text-indigo-300 font-extrabold uppercase tracking-wider border-b border-slate-800/80 pb-2">
+                    <span class="flex items-center gap-1.5 text-amber-400">
+                        <i class="fa-solid fa-trophy"></i> OFFICIAL CERTIFICATE
+                    </span>
+                    <span id="certDateSpan" class="text-slate-400">Today</span>
+                </div>
 
-            <div id="certificateCardPreview" class="p-5 rounded-2xl bg-gradient-to-br from-slate-900 via-indigo-950/60 to-slate-950 border border-indigo-500/30 text-left space-y-3 shadow-inner">
-                <div class="flex justify-between items-center text-[11px] text-indigo-300 font-bold uppercase tracking-wider">
-                    <span>Verified 3D Streak</span>
-                    <span id="certDateSpan" class="text-amber-400">Today</span>
+                <div class="text-center py-2 space-y-1">
+                    <div class="inline-flex w-14 h-14 rounded-2xl bg-gradient-to-tr from-amber-500 via-yellow-400 to-amber-200 items-center justify-center text-slate-950 text-2xl shadow-lg shadow-amber-500/40 mb-1">
+                        <i class="fa-solid fa-award"></i>
+                    </div>
+                    <h4 class="font-black text-lg text-amber-300 tracking-tight">MICROHABITS CHAMPION</h4>
+                    <p class="text-[11px] text-indigo-200/90 font-medium">3D Glassmorphism Edition</p>
                 </div>
-                <div class="border-t border-slate-800 pt-2">
-                    <p class="text-xs text-slate-400">Awarded to Master of Consistency:</p>
-                    <input type="text" id="champNameInput" value="Champion Developer" class="bg-transparent border-b border-indigo-500/50 text-white font-black text-sm w-full py-1 focus:outline-none focus:border-amber-400" placeholder="Enter your name...">
+
+                <div class="bg-slate-950/80 p-3 rounded-xl border border-indigo-500/30 space-y-1">
+                    <p class="text-[10px] text-slate-400 uppercase tracking-widest font-bold">Awarded To</p>
+                    <input type="text" id="champNameInput" value="Champion Developer" class="bg-transparent text-white font-black text-base w-full focus:outline-none focus:border-amber-400" placeholder="Enter your name...">
                 </div>
-                <div class="flex justify-between items-center text-xs pt-1 text-slate-300">
-                    <span>🔥 Status: <strong class="text-amber-300">100% Completed</strong></span>
-                    <span>🏆 Rank: <strong class="text-indigo-300">Legend</strong></span>
+
+                <div class="flex justify-between items-center text-xs pt-1">
+                    <span class="bg-amber-500/10 border border-amber-500/30 px-2.5 py-1 rounded-lg text-amber-300 font-bold">🔥 100% Completed</span>
+                    <span class="bg-indigo-500/10 border border-indigo-500/30 px-2.5 py-1 rounded-lg text-indigo-300 font-bold">🏆 Rank: Legend</span>
                 </div>
             </div>
 
             <div class="flex gap-2 pt-2">
-                <button onclick="copyCertificateShareText(event)" class="flex-1 bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-950 font-extrabold py-3 rounded-xl text-xs shadow-lg shadow-amber-500/20 hover:brightness-110 transition active:scale-95">
-                    <i class="fa-solid fa-share-nodes mr-1"></i> Share Certificate
+                <button onclick="downloadCertificateImage(event)" class="flex-1 bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-950 font-extrabold py-3 rounded-xl text-xs shadow-lg shadow-amber-500/20 hover:brightness-110 transition active:scale-95 flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-download"></i> Download Image & Copy Text
                 </button>
                 <button onclick="openCertificateModal()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-4 py-3 rounded-xl font-bold text-xs border border-slate-700 transition">
                     Close
@@ -736,7 +744,7 @@
             runAiAnalysis();
         };
 
-        // 3D Certificate Modal Controller
+        // 3D Certificate Modal & Image Generator
         function openCertificateModal() {
             const modal = document.getElementById('certificateModal');
             modal.classList.toggle('hidden');
@@ -744,17 +752,35 @@
             document.getElementById('certDateSpan').innerText = new Date().toLocaleDateString('en-US', options);
         }
 
-        function copyCertificateShareText(event) {
+        function downloadCertificateImage(event) {
+            const btn = event.currentTarget;
+            const originalHTML = btn.innerHTML;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-1"></i> Generating Image...`;
+
+            const card = document.getElementById('certificateCardPreview');
             const name = document.getElementById('champNameInput').value || 'Champion';
-            const shareText = `🏆 I just unlocked 100% completion today on MicroHabits AI – Champions 3D Edition! Certified Master of Consistency (${name}). Check out the app and build your streak! 🚀`;
-            
-            navigator.clipboard.writeText(shareText).then(() => {
-                const btn = event.currentTarget;
-                const originalHTML = btn.innerHTML;
-                btn.innerHTML = `<i class="fa-solid fa-check mr-1"></i> Copied to Clipboard!`;
-                setTimeout(() => {
-                    btn.innerHTML = originalHTML;
-                }, 2000);
+
+            // Vygeneruje reálny PNG obrázok z kartičky
+            html2canvas(card, {
+                backgroundColor: '#020617',
+                scale: 2
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = `MicroHabits_Certificate_${name.replace(/\s+/g, '_')}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+
+                // Skopíruje sprievodný text do schránky
+                const shareText = `🏆 I just unlocked 100% completion today on MicroHabits AI – Champions 3D Edition! Certified Master of Consistency (${name}). Check out the app and build your streak! 🚀`;
+                navigator.clipboard.writeText(shareText).then(() => {
+                    btn.innerHTML = `<i class="fa-solid fa-check mr-1"></i> Image Downloaded & Text Copied!`;
+                    setTimeout(() => {
+                        btn.innerHTML = originalHTML;
+                    }, 2500);
+                });
+            }).catch(() => {
+                btn.innerHTML = originalHTML;
+                alert("Error generating certificate image.");
             });
         }
 
