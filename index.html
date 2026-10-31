@@ -457,7 +457,7 @@
             </div>
 
             <div class="flex gap-2 pt-2">
-                <button onclick="copyCertificateShareText()" class="flex-1 bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-950 font-extrabold py-3 rounded-xl text-xs shadow-lg shadow-amber-500/20 hover:brightness-110 transition active:scale-95">
+                <button onclick="copyCertificateShareText(event)" class="flex-1 bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-950 font-extrabold py-3 rounded-xl text-xs shadow-lg shadow-amber-500/20 hover:brightness-110 transition active:scale-95">
                     <i class="fa-solid fa-share-nodes mr-1"></i> Share Certificate
                 </button>
                 <button onclick="openCertificateModal()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-4 py-3 rounded-xl font-bold text-xs border border-slate-700 transition">
@@ -744,12 +744,17 @@
             document.getElementById('certDateSpan').innerText = new Date().toLocaleDateString('en-US', options);
         }
 
-        function copyCertificateShareText() {
+        function copyCertificateShareText(event) {
             const name = document.getElementById('champNameInput').value || 'Champion';
-            const shareText = `🏆 I just unlocked 100% completion today on MicroHabits AI – Champions 3D Edition! Certified Master of Consistency. Check out the app! 🚀`;
+            const shareText = `🏆 I just unlocked 100% completion today on MicroHabits AI – Champions 3D Edition! Certified Master of Consistency (${name}). Check out the app and build your streak! 🚀`;
+            
             navigator.clipboard.writeText(shareText).then(() => {
-                alert(`✅ Certificate & share text copied to clipboard! Ready to post on LinkedIn or Facebook.`);
-                openCertificateModal();
+                const btn = event.currentTarget;
+                const originalHTML = btn.innerHTML;
+                btn.innerHTML = `<i class="fa-solid fa-check mr-1"></i> Copied to Clipboard!`;
+                setTimeout(() => {
+                    btn.innerHTML = originalHTML;
+                }, 2000);
             });
         }
 
