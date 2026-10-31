@@ -499,8 +499,8 @@
             </div>
 
             <div class="flex gap-2 pt-2">
-                <button onclick="downloadCertificateDirectSVG(event)" class="flex-1 bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-950 font-extrabold py-3 rounded-xl text-xs shadow-lg shadow-amber-500/20 hover:brightness-110 transition active:scale-95 flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-download"></i> Download Certificate Image 🚀
+                <button onclick="copyCertificateImageToClipboardDirect(event)" class="flex-1 bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-950 font-extrabold py-3 rounded-xl text-xs shadow-lg shadow-amber-500/20 hover:brightness-110 transition active:scale-95 flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-copy"></i> Copy Image to Clipboard 📋
                 </button>
                 <button onclick="openCertificateModal()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-4 py-3 rounded-xl font-bold text-xs border border-slate-700 transition">
                     Close
@@ -793,11 +793,11 @@
             syncMainNamesToCert();
         }
 
-        // Spoľahlivý SVG/Canvas generátor obrázka bez externých knižníc
-        function downloadCertificateDirectSVG(event) {
+        // Skopírovanie vygenerovaného certifikátu priamo do schránky (bez sťahovania do súborov)
+        function copyCertificateImageToClipboardDirect(event) {
             const btn = event.currentTarget;
             const originalHTML = btn.innerHTML;
-            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-1"></i> Creating Image...`;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-1"></i> Copying Image...`;
 
             const fn = document.getElementById('mainFirstNameInput').value.trim() || 'Alex';
             const ln = document.getElementById('mainLastNameInput').value.trim() || 'Developer';
@@ -809,7 +809,6 @@
             canvas.height = 800;
             const ctx = canvas.getContext('2d');
 
-            // Pozadie
             const bgGrad = ctx.createLinearGradient(0, 0, 1200, 800);
             bgGrad.addColorStop(0, '#020617');
             bgGrad.addColorStop(0.5, '#0f172a');
@@ -817,17 +816,14 @@
             ctx.fillStyle = bgGrad;
             ctx.fillRect(0, 0, 1200, 800);
 
-            // Zlatý rámček
             ctx.strokeStyle = '#eab308';
             ctx.lineWidth = 6;
             ctx.strokeRect(40, 40, 1120, 720);
 
-            // Vnútorný tenký rámček
             ctx.strokeStyle = 'rgba(0, 240, 255, 0.4)';
             ctx.lineWidth = 2;
             ctx.strokeRect(55, 55, 1090, 690);
 
-            // Hlavička
             ctx.fillStyle = '#00f0ff';
             ctx.font = 'bold 24px "Plus Jakarta Sans", sans-serif';
             ctx.fillText('🏆 OFFICIAL CERTIFICATE', 90, 120);
@@ -838,13 +834,11 @@
             ctx.fillText(`Date: ${dateStr}`, 1110, 120);
             ctx.textAlign = 'left';
 
-            // Hlavný nadpis
             ctx.fillStyle = '#facc15';
             ctx.font = '900 48px "Plus Jakarta Sans", sans-serif';
             ctx.textAlign = 'center';
             ctx.fillText('MICROHABITS CHAMPION', 600, 250);
 
-            // Stuha 100%
             ctx.fillStyle = 'rgba(234, 179, 8, 0.2)';
             ctx.strokeStyle = 'rgba(234, 179, 8, 0.6)';
             ctx.lineWidth = 2;
@@ -857,7 +851,6 @@
             ctx.font = 'bold 22px "Plus Jakarta Sans", sans-serif';
             ctx.fillText('🏆 100% TASK MASTERY CERTIFIED', 600, 323);
 
-            // Meno
             ctx.fillStyle = '#94a3b8';
             ctx.font = 'bold 18px "Plus Jakarta Sans", sans-serif';
             ctx.fillText('AWARDED TO', 600, 430);
@@ -870,7 +863,6 @@
             ctx.font = '20px "Plus Jakarta Sans", sans-serif';
             ctx.fillText('For successful 100% completion of all tasks and daily micro-habits.', 600, 540);
 
-            // Päta certifikátu
             ctx.fillStyle = 'rgba(0, 240, 255, 0.15)';
             ctx.strokeStyle = 'rgba(0, 240, 255, 0.4)';
             ctx.beginPath();
@@ -886,14 +878,28 @@
             ctx.font = 'bold 18px "Plus Jakarta Sans", sans-serif';
             ctx.fillText('🏆 Rank: Legend 3000', 870, 672);
 
-            // Stiahnutie súboru
+            canvas.toBlob(blob => {
+                if (navigator.clipboard && window.ClipboardItem) {
+                    const item = new ClipboardItem({ 'image/png': blob });
+                    navigator.clipboard.write([item]).then(() => {
+                        btn.innerHTML = `<i class="fa-solid fa-check mr-1"></i> Image Copied! Press Ctrl+V`;
+                        setTimeout(() => { btn.innerHTML = originalHTML; }, 3000);
+                    }).catch(() => {
+                        fallbackDownloadCanvas(canvas, fullName, btn, originalHTML);
+                    });
+                } else {
+                    fallbackDownloadCanvas(canvas, fullName, btn, originalHTML);
+                }
+            }, 'image/png');
+        }
+
+        function fallbackDownloadCanvas(canvas, fullName, btn, originalHTML) {
             const link = document.createElement('a');
             link.download = `MicroHabits_Certificate_${fullName.replace(/\s+/g, '_')}.png`;
             link.href = canvas.toDataURL('image/png');
             link.click();
-
-            btn.innerHTML = `<i class="fa-solid fa-check mr-1"></i> Downloaded Successfully!`;
-            setTimeout(() => { btn.innerHTML = originalHTML; }, 2500);
+            btn.innerHTML = `<i class="fa-solid fa-download mr-1"></i> Downloaded Successfully!`;
+            setTimeout(() => { btn.innerHTML = originalHTML; }, 3000);
         }
 
         function runAiAnalysis() {
@@ -1015,7 +1021,7 @@
                 const shareBtn = document.getElementById('share-btn');
                 const originalText = shareBtn.textContent;
                 shareBtn.textContent = "✅ Skopírované!";
-                setTimeout => {
+                setTimeout(() => {
                     shareBtn.textContent = originalText;
                 }, 2000);
             });
@@ -1144,14 +1150,14 @@
             requestAnimationFrame(animateFireworks);
         }
 
-        window.onload = function() {
-            renderDaySelector();
-            saveAndRender();
-            runAiAnalysis();
-            updateReminderBadge();
-            animateFireworks();
-            syncMainNamesToCert();
-        };
+    window.onload = function() {
+        renderDaySelector();
+        saveAndRender();
+        runAiAnalysis();
+        updateReminderBadge();
+        animateFireworks();
+        syncMainNamesToCert();
+    };
     </script>
 
     <!-- Počítadlo návštevnosti skript -->
