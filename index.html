@@ -28,7 +28,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- html2canvas pre sťahovanie certifikátu ako obrázok -->
+    <!-- html2canvas pre generovanie obrázka z certifikátu -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     
     <style>
@@ -434,7 +434,7 @@
                 <i class="fa-solid fa-xmark"></i>
             </button>
             
-            <!-- Tento prvok bude exportovaný ako samostatný obrázok PNG -->
+            <!-- Tento prvok bude vygenerovaný ako obrázok priamo do schránky -->
             <div id="certificateCardPreview" class="p-6 rounded-2xl bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-950 border-2 border-amber-500/60 text-left space-y-4 shadow-2xl relative overflow-hidden">
                 <div class="absolute -top-10 -right-10 w-28 h-28 bg-amber-500/20 rounded-full blur-2xl"></div>
                 
@@ -465,8 +465,8 @@
             </div>
 
             <div class="flex gap-2 pt-2">
-                <button onclick="downloadCertificateImage(event)" class="flex-1 bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-950 font-extrabold py-3 rounded-xl text-xs shadow-lg shadow-amber-500/20 hover:brightness-110 transition active:scale-95 flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-download"></i> Download Image & Copy Text
+                <button onclick="copyCertificateImageToClipboard(event)" class="flex-1 bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-950 font-extrabold py-3 rounded-xl text-xs shadow-lg shadow-amber-500/20 hover:brightness-110 transition active:scale-95 flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-copy"></i> Copy Image to Clipboard
                 </button>
                 <button onclick="openCertificateModal()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-4 py-3 rounded-xl font-bold text-xs border border-slate-700 transition">
                     Close
@@ -744,7 +744,7 @@
             runAiAnalysis();
         };
 
-        // 3D Certificate Modal & Image Generator
+        // 3D Certificate Modal & Image Clipboard Engine
         function openCertificateModal() {
             const modal = document.getElementById('certificateModal');
             modal.classList.toggle('hidden');
@@ -752,7 +752,7 @@
             document.getElementById('certDateSpan').innerText = new Date().toLocaleDateString('en-US', options);
         }
 
-        function downloadCertificateImage(event) {
+        function copyCertificateImageToClipboard(event) {
             const btn = event.currentTarget;
             const originalHTML = btn.innerHTML;
             btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-1"></i> Generating Image...`;
@@ -760,28 +760,37 @@
             const card = document.getElementById('certificateCardPreview');
             const name = document.getElementById('champNameInput').value || 'Champion';
 
-            // Vygeneruje reálny PNG obrázok z kartičky
             html2canvas(card, {
                 backgroundColor: '#020617',
                 scale: 2
             }).then(canvas => {
-                const link = document.createElement('a');
-                link.download = `MicroHabits_Certificate_${name.replace(/\s+/g, '_')}.png`;
-                link.href = canvas.toDataURL('image/png');
-                link.click();
-
-                // Skopíruje sprievodný text do schránky
-                const shareText = `🏆 I just unlocked 100% completion today on MicroHabits AI – Champions 3D Edition! Certified Master of Consistency (${name}). Check out the app and build your streak! 🚀`;
-                navigator.clipboard.writeText(shareText).then(() => {
-                    btn.innerHTML = `<i class="fa-solid fa-check mr-1"></i> Image Downloaded & Text Copied!`;
-                    setTimeout(() => {
-                        btn.innerHTML = originalHTML;
-                    }, 2500);
-                });
+                canvas.toBlob(blob => {
+                    // Kopírovanie obrázka do schránky prehliadača
+                    if (navigator.clipboard && window.ClipboardItem) {
+                        const item = new ClipboardItem({ 'image/png': blob });
+                        navigator.clipboard.write([item]).then(() => {
+                            btn.innerHTML = `<i class="fa-solid fa-check mr-1"></i> Image Copied! Press Ctrl+V`;
+                            setTimeout(() => { btn.innerHTML = originalHTML; }, 2500);
+                        }).catch(() => {
+                            fallbackDownload(canvas, name, btn, originalHTML);
+                        });
+                    } else {
+                        fallbackDownload(canvas, name, btn, originalHTML);
+                    }
+                }, 'image/png');
             }).catch(() => {
                 btn.innerHTML = originalHTML;
                 alert("Error generating certificate image.");
             });
+        }
+
+        function fallbackDownload(canvas, name, btn, originalHTML) {
+            const link = document.createElement('a');
+            link.download = `MicroHabits_Certificate_${name.replace(/\s+/g, '_')}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+            btn.innerHTML = `<i class="fa-solid fa-download mr-1"></i> Image Downloaded!`;
+            setTimeout(() => { btn.innerHTML = originalHTML; }, 2500);
         }
 
         function runAiAnalysis() {
