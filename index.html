@@ -41,7 +41,7 @@
         }
 
         .glass-panel-3d {
-            background: rgba(13, 17, 38, 0.65);
+            background: rgba(13, 17, 38, 0.7);
             backdrop-filter: blur(25px);
             -webkit-backdrop-filter: blur(25px);
             border: 1px solid rgba(255, 255, 255, 0.15);
@@ -68,11 +68,6 @@
         .gold-border-glow {
             border: 1px solid rgba(234, 179, 8, 0.6);
             box-shadow: 0 0 35px rgba(234, 179, 8, 0.35), inset 0 0 20px rgba(234, 179, 8, 0.2);
-        }
-
-        .cyber-border-glow {
-            border: 1px solid rgba(0, 240, 255, 0.5);
-            box-shadow: 0 0 30px rgba(0, 240, 255, 0.25);
         }
 
         .fireworks-canvas {
@@ -212,7 +207,7 @@
             </div>
             
             <div class="flex items-center gap-2.5">
-                <button id="reminderBellBtn" onclick="toggleReminderModal()" class="w-10 h-10 rounded-xl bg-slate-900/90 border border-slate-700/60 hover:border-cyan-400 flex items-center justify-center text-slate-300 hover:text-cyan-400 transition-all relative shadow-cyber-glow">
+                <button id="reminderBellBtn" onclick="toggleReminderModal()" class="w-10 h-10 rounded-xl bg-slate-900/90 border border-slate-700/60 hover:border-cyan-400 flex items-center justify-center text-slate-300 hover:text-cyan-400 transition-all relative">
                     <i class="fa-solid fa-bell text-sm"></i>
                     <span id="reminderActiveBadge" class="hidden absolute top-2 right-2 w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
                 </button>
@@ -447,7 +442,7 @@
                 <i class="fa-solid fa-xmark"></i>
             </button>
             
-            <!-- Tento prvok bude vygenerovaný ako obrázok priamo do schránky -->
+            <!-- Tento prvok sa vygeneruje ako PNG obrázok vrátane Vášho Mien a Priezviska -->
             <div id="certificateCardPreview" class="p-6 rounded-2xl bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-900 border-2 border-amber-500/70 text-left space-y-4 shadow-2xl relative overflow-hidden">
                 <div class="absolute -top-10 -right-10 w-28 h-28 bg-amber-500/25 rounded-full blur-2xl"></div>
                 <div class="absolute -bottom-10 -left-10 w-28 h-28 bg-cyan-500/20 rounded-full blur-2xl"></div>
@@ -464,21 +459,27 @@
                         <i class="fa-solid fa-award"></i>
                     </div>
                     <h4 class="font-black text-xl text-amber-300 tracking-tight">MICROHABITS CHAMPION</h4>
-                    <p class="text-[11px] text-cyan-200/90 font-bold uppercase tracking-widest">100% Task Mastery Certified</p>
+                    <p class="text-[11px] text-cyan-200/90 font-bold uppercase tracking-widest bg-amber-500/10 py-1 rounded-md border border-amber-500/30">
+                        100% TASK MASTERY CERTIFIED
+                    </p>
                 </div>
 
-                <!-- Dve polia pre Meno a Priezvisko v angličtine -->
+                <!-- Dve polia pre First Name & Last Name v angličtine -->
                 <div class="bg-slate-950/90 p-3.5 rounded-xl border border-amber-500/30 space-y-2">
                     <p class="text-[10px] text-slate-400 uppercase tracking-widest font-bold">Awarded To</p>
                     <div class="grid grid-cols-2 gap-2">
                         <div>
                             <label class="block text-[9px] text-slate-400 uppercase font-bold mb-0.5">First Name</label>
-                            <input type="text" id="champFirstNameInput" value="Alex" class="bg-slate-900/90 border border-slate-700/70 rounded-lg text-white font-black text-xs w-full px-2.5 py-1.5 focus:outline-none focus:border-amber-400" placeholder="First Name...">
+                            <input type="text" id="champFirstNameInput" oninput="updateCertDisplayName()" value="Alex" class="bg-slate-900/90 border border-slate-700/70 rounded-lg text-white font-black text-xs w-full px-2.5 py-1.5 focus:outline-none focus:border-amber-400" placeholder="First Name...">
                         </div>
                         <div>
                             <label class="block text-[9px] text-slate-400 uppercase font-bold mb-0.5">Last Name</label>
-                            <input type="text" id="champLastNameInput" value="Developer" class="bg-slate-900/90 border border-slate-700/70 rounded-lg text-white font-black text-xs w-full px-2.5 py-1.5 focus:outline-none focus:border-amber-400" placeholder="Last Name...">
+                            <input type="text" id="champLastNameInput" oninput="updateCertDisplayName()" value="Developer" class="bg-slate-900/90 border border-slate-700/70 rounded-lg text-white font-black text-xs w-full px-2.5 py-1.5 focus:outline-none focus:border-amber-400" placeholder="Last Name...">
                         </div>
+                    </div>
+                    <div class="pt-1 border-t border-slate-800 text-center">
+                        <span class="text-[10px] text-slate-400">Certificate Holder: </span>
+                        <strong id="certFullDisplayName" class="text-xs text-amber-300 font-extrabold">Alex Developer</strong>
                     </div>
                 </div>
 
@@ -772,12 +773,20 @@
             runAiAnalysis();
         };
 
+        // Dynamická aktualizácia celého mena na certifikáte
+        function updateCertDisplayName() {
+            const fn = document.getElementById('champFirstNameInput').value.trim() || 'Alex';
+            const ln = document.getElementById('champLastNameInput').value.trim() || 'Developer';
+            document.getElementById('certFullDisplayName').innerText = `${fn} ${ln}`;
+        }
+
         // 3D Certificate Modal & Image Clipboard Engine
         function openCertificateModal() {
             const modal = document.getElementById('certificateModal');
             modal.classList.toggle('hidden');
             const options = { year: 'numeric', month: 'short', day: 'numeric' };
             document.getElementById('certDateSpan').innerText = new Date().toLocaleDateString('en-US', options);
+            updateCertDisplayName();
         }
 
         function copyCertificateImageToClipboard(event) {
@@ -866,7 +875,7 @@
             setTimeout(runAiAnalysis, 600);
         });
 
-        // 10+ Motivačných a Virálnych viet (Toast & Roast) v slovenčine a angličtine
+        // Presne 19 Motivačných a Virálnych viet (Toast & Roast) v slovenčine a angličtine
         const aiQuotes = {
             toast: [
                 "Skvelá práca! S takýmto tempom zničíš každú prokrastináciu v 3. tisícročí! 🚀",
@@ -878,7 +887,16 @@
                 "You just proved that daily micro-wins build empire-level discipline! 👑",
                 "100% task completion unlocked! You're officially mastering consistency. 🎯",
                 "Disciplína prekoná talent každý deň. Dnes si dominoval na plnej čiare! ⚡",
-                "Nič nezastaví človeka, ktorý si vybudoval železné denné návyky! ⭐"
+                "Nič nezastaví človeka, ktorý si vybudoval železné denné návyky! ⭐",
+                "Krok za krokom k dokonalosti. Tvoja vôľa je silnejšia než kedykoľvek predtým! 💎",
+                "Dnešný 100% výsledok nie je náhoda, ale výsledok tvojej odhodlanosti! 🚀",
+                "Champions don't wait for motivation, they build habits. Legendary job! 🥇",
+                "Today you conquered your list. Tomorrow you conquer your vision! 🌟",
+                "Neuronové siete v tvojom mozgu si práve vytvorili nezničiteľný návyk! 🧠",
+                "Fast tempo, 100% execution, absolute dominance. Keep the momentum high! ⚡",
+                "Vynikajúce! Tvoje denné víťazstvá tvoria základ pre obrovské životné úspechy! 🎉",
+                "Small daily improvements are the key to staggering long-term results! 📈",
+                "Perfektná práca! Odomkol si najvyšší level osobného rozvoja a disciplíny! 🛡️"
             ],
             roast: [
                 "Vážne? Včera veľké reči a dnes zatiaľ nič? Klávesnica plače v kúte! 🔥",
@@ -890,7 +908,16 @@
                 "Are you building micro-habits or macro-excuses today? Make a choice! ⚡",
                 "Waiting for 'tomorrow' is why 99% never achieve their goals. Start right now!",
                 "Kým ty premýšľaš, ostatní už majú hotovo. Klikni na ten návyk! 💥",
-                "Žiadne výhovorky v 3. tisícročí! Odfúkni prach z predsavzatí a konaj! 🛠️"
+                "Žiadne výhovorky v 3. tisícročí! Odfúkni prach z predsavzatí a konaj! 🛠️",
+                "Tvoj zoznam úloh vyzerá opustený ako mesto duchov. Sprav s tím niečo! 👻",
+                "Snívať o výsledkoch nestačí, treba aj vstať a odklikať tie políčka! ⏰",
+                "Excuse level: Master. Execution level: Loading... Shake it off and execute!",
+                "Do you want progress or do you want comfortable excuses? Pick one! 🎯",
+                "Káva vypitá, monitor zapnutý, ale návyky na nule? Čas na zmenu! ☕",
+                "Yesterday you said tomorrow. Don't let today turn into another excuse!",
+                "Jediná prekážka medzi tebou a 100% výsledkom si ty sám. Znič ju! 🔨",
+                "If it was easy, everyone would do it. Stop lagging and level up! 💻",
+                "Prestaň odkladať svoje ciele na pondelok. Dnešok je tvoj deň víťazstva! 🏆"
             ]
         };
 
