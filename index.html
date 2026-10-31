@@ -216,7 +216,7 @@
 
     <main class="max-w-xl mx-auto px-5 pt-6 space-y-6">
 
-        <!-- 3D Interactive Day Selector (OPRAVENÉ - zaručene vykreslí dni) -->
+        <!-- 3D Interactive Day Selector -->
         <section class="glass-panel-3d rounded-2xl p-4 border border-slate-800">
             <div class="flex justify-between items-center mb-3 px-1">
                 <span class="text-xs font-extrabold uppercase tracking-wider text-slate-400 flex items-center gap-2">
@@ -292,7 +292,7 @@
             </div>
         </section>
 
-        <!-- AI Roast & Toast Modul (19 fráz) -->
+        <!-- AI Roast & Toast Modul -->
         <div class="ai-roast-card glass-panel-3d">
             <div class="roast-header">
                 <h3 class="font-extrabold text-xs uppercase tracking-wider text-pink-400 flex items-center gap-1.5"><i class="fa-solid fa-robot"></i> AI Coach: Viral Roast & Toast</h3>
@@ -790,10 +790,11 @@
             syncMainNamesToCert();
         }
 
+        // VYSOKO MODERNÝ PROFI 3D CANVASA CERTIFIKÁT ENGINE
         function copyCertificateImageToClipboardDirect(event) {
             const btn = event.currentTarget;
             const originalHTML = btn.innerHTML;
-            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-1"></i> Copying Image...`;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-1"></i> Rendering 3D Certificate...`;
 
             const fnInput = document.getElementById('mainFirstNameInput');
             const lnInput = document.getElementById('mainLastNameInput');
@@ -808,85 +809,162 @@
             canvas.height = 800;
             const ctx = canvas.getContext('2d');
 
-            const bgGrad = ctx.createLinearGradient(0, 0, 1200, 800);
-            bgGrad.addColorStop(0, '#020617');
-            bgGrad.addColorStop(0.5, '#0f172a');
-            bgGrad.addColorStop(1, '#020617');
+            // 1. Tmavý cyber-gradient pozadia
+            const bgGrad = ctx.createRadialGradient(600, 400, 50, 600, 400, 700);
+            bgGrad.addColorStop(0, '#130d2a');
+            bgGrad.addColorStop(0.6, '#0b0618');
+            bgGrad.addColorStop(1, '#030108');
             ctx.fillStyle = bgGrad;
             ctx.fillRect(0, 0, 1200, 800);
 
-            ctx.strokeStyle = '#eab308';
+            // 2. Dekoratívne 3D svietiace gule (Neon Glow Spheres)
+            const drawGlowSphere = (x, y, radius, color) => {
+                const g = ctx.createRadialGradient(x, y, 0, x, y, radius);
+                g.addColorStop(0, color);
+                g.addColorStop(1, 'transparent');
+                ctx.fillStyle = g;
+                ctx.beginPath();
+                ctx.arc(x, y, radius, 0, Math.PI * 2);
+                ctx.fill();
+            };
+            drawGlowSphere(150, 150, 250, 'rgba(0, 240, 255, 0.25)');
+            drawGlowSphere(1050, 650, 280, 'rgba(255, 0, 127, 0.2)');
+            drawGlowSphere(600, 400, 300, 'rgba(112, 0, 255, 0.15)');
+
+            // 3. Vonkajší a vnútorný zlatý 3D rám (Double Golden Cyber-Frame)
+            ctx.strokeStyle = 'rgba(234, 179, 8, 0.8)';
             ctx.lineWidth = 6;
+            ctx.shadowColor = '#facc15';
+            ctx.shadowBlur = 20;
             ctx.strokeRect(40, 40, 1120, 720);
 
-            ctx.strokeStyle = 'rgba(0, 240, 255, 0.4)';
+            ctx.strokeStyle = 'rgba(0, 240, 255, 0.5)';
             ctx.lineWidth = 2;
+            ctx.shadowColor = '#00f0ff';
+            ctx.shadowBlur = 15;
             ctx.strokeRect(55, 55, 1090, 690);
+            ctx.shadowBlur = 0; // reset shadow
 
-            ctx.fillStyle = '#00f0ff';
-            ctx.font = 'bold 24px "Plus Jakarta Sans", sans-serif';
-            ctx.fillText('🏆 OFFICIAL CERTIFICATE', 90, 120);
-
-            ctx.fillStyle = '#94a3b8';
-            ctx.font = '20px "Plus Jakarta Sans", sans-serif';
-            ctx.textAlign = 'right';
-            ctx.fillText(`Date: ${dateStr}`, 1110, 120);
-            ctx.textAlign = 'left';
-
-            ctx.fillStyle = '#facc15';
-            ctx.font = '900 48px "Plus Jakarta Sans", sans-serif';
-            ctx.textAlign = 'center';
-            ctx.fillText('MICROHABITS CHAMPION', 600, 250);
-
-            ctx.fillStyle = 'rgba(234, 179, 8, 0.2)';
-            ctx.strokeStyle = 'rgba(234, 179, 8, 0.6)';
+            // 4. Stredový sklenený panel (Glassmorphism Central Card)
+            ctx.fillStyle = 'rgba(18, 12, 38, 0.82)';
+            ctx.strokeStyle = 'rgba(0, 240, 255, 0.35)';
             ctx.lineWidth = 2;
             ctx.beginPath();
-            ctx.roundRect(350, 290, 500, 50, 12);
+            ctx.roundRect(100, 90, 1000, 620, 24);
+            ctx.fill();
+            ctx.stroke();
+
+            // 5. Hlavička certifikátu
+            ctx.fillStyle = '#00f0ff';
+            ctx.font = 'bold 22px "Plus Jakarta Sans", sans-serif';
+            ctx.fillText('🏆 OFFICIAL MASTER CERTIFICATE', 140, 145);
+
+            ctx.fillStyle = '#94a3b8';
+            ctx.font = 'bold 18px "Plus Jakarta Sans", sans-serif';
+            ctx.textAlign = 'right';
+            ctx.fillText(`Issued: ${dateStr}`, 1060, 145);
+            ctx.textAlign = 'left';
+
+            // Odddeľovač hlavičky
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+            ctx.beginPath();
+            ctx.moveTo(140, 165);
+            ctx.lineTo(1060, 165);
+            ctx.stroke();
+
+            // 6. 3D Zlatá Trofej Ikona / Odznak
+            ctx.shadowColor = '#eab308';
+            ctx.shadowBlur = 25;
+            ctx.fillStyle = '#facc15';
+            ctx.font = '900 64px "Font Awesome 6 Free", sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText('🏆', 600, 250);
+            ctx.shadowBlur = 0;
+
+            // Hlavný titulok certifikátu
+            const textGrad = ctx.createLinearGradient(400, 0, 800, 0);
+            textGrad.addColorStop(0, '#fde047');
+            textGrad.addColorStop(0.5, '#facc15');
+            textGrad.addColorStop(1, '#eab308');
+            ctx.fillStyle = textGrad;
+            ctx.font = '900 46px "Plus Jakarta Sans", sans-serif';
+            ctx.fillText('MICROHABITS CHAMPION', 600, 310);
+
+            // Zlatá stužka - Mastery Status
+            ctx.fillStyle = 'rgba(234, 179, 8, 0.15)';
+            ctx.strokeStyle = 'rgba(234, 179, 8, 0.6)';
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            ctx.roundRect(330, 335, 540, 44, 12);
             ctx.fill();
             ctx.stroke();
 
             ctx.fillStyle = '#fde047';
-            ctx.font = 'bold 22px "Plus Jakarta Sans", sans-serif';
-            ctx.fillText('🏆 100% TASK MASTERY CERTIFIED', 600, 323);
+            ctx.font = 'bold 19px "Plus Jakarta Sans", sans-serif';
+            ctx.fillText('VERIFIED 100% DAILY TASK MASTERY', 600, 363);
 
+            // Text pre koho je certifikát
             ctx.fillStyle = '#94a3b8';
-            ctx.font = 'bold 18px "Plus Jakarta Sans", sans-serif';
-            ctx.fillText('AWARDED TO', 600, 430);
+            ctx.font = 'bold 16px "Plus Jakarta Sans", sans-serif';
+            ctx.fillText('PROUDLY PRESENTED TO', 600, 430);
 
+            // Meno držiteľa s neónovým efektom
+            ctx.shadowColor = '#00f0ff';
+            ctx.shadowBlur = 20;
             ctx.fillStyle = '#ffffff';
-            ctx.font = '900 44px "Plus Jakarta Sans", sans-serif';
+            ctx.font = '900 48px "Plus Jakarta Sans", sans-serif';
             ctx.fillText(fullName, 600, 490);
+            ctx.shadowBlur = 0;
 
+            // Popisný podtext
             ctx.fillStyle = '#cbd5e1';
-            ctx.font = '20px "Plus Jakarta Sans", sans-serif';
-            ctx.fillText('For successful 100% completion of all tasks and daily micro-habits.', 600, 540);
+            ctx.font = '18px "Plus Jakarta Sans", sans-serif';
+            ctx.fillText('For exceptional discipline, focus, and 100% execution across all daily micro-habits.', 600, 535);
 
-            ctx.fillStyle = 'rgba(0, 240, 255, 0.15)';
-            ctx.strokeStyle = 'rgba(0, 240, 255, 0.4)';
+            // 7. Spodný štatistický 3D Panel (Stats Bar)
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
+            ctx.strokeStyle = 'rgba(0, 240, 255, 0.3)';
+            ctx.lineWidth = 1;
             ctx.beginPath();
-            ctx.roundRect(90, 630, 1020, 70, 14);
+            ctx.roundRect(140, 580, 920, 80, 16);
             ctx.fill();
             ctx.stroke();
 
+            // Štatistika 1: Success Rate
             ctx.fillStyle = '#38bdf8';
             ctx.font = 'bold 18px "Plus Jakarta Sans", sans-serif';
-            ctx.fillText('🔥 100% Success Rate', 130, 672);
+            ctx.textAlign = 'left';
+            ctx.fillText('🔥 100% Success Rate', 180, 627);
 
+            // Štatistika 2: Rank
+            ctx.fillStyle = '#f472b6';
+            ctx.font = 'bold 18px "Plus Jakarta Sans", sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText('⚡ Rank: Legend 3000', 600, 627);
+
+            // Štatistika 3: Protocol
             ctx.fillStyle = '#34d399';
             ctx.font = 'bold 18px "Plus Jakarta Sans", sans-serif';
-            ctx.fillText('🏆 Rank: Legend 3000', 870, 672);
+            ctx.textAlign = 'right';
+            ctx.fillText('🛡️ AI Protocol Verified', 1020, 627);
 
+            // Uloženie/Kopírovanie z Canvasu
             canvas.toBlob(blob => {
-                if (navigator.clipboard && window.ClipboardItem) {
+                if (!blob) {
+                    btn.innerHTML = `<i class="fa-solid fa-triangle-exclamation mr-1"></i> Render Failed`;
+                    setTimeout(() => { btn.innerHTML = originalHTML; }, 3000);
+                    return;
+                }
+
+                try {
                     const item = new ClipboardItem({ 'image/png': blob });
                     navigator.clipboard.write([item]).then(() => {
-                        btn.innerHTML = `<i class="fa-solid fa-check mr-1"></i> Image Copied! Press Ctrl+V`;
+                        btn.innerHTML = `<i class="fa-solid fa-check mr-1"></i> Copied to Clipboard!`;
                         setTimeout(() => { btn.innerHTML = originalHTML; }, 3000);
                     }).catch(() => {
                         fallbackDownloadCanvas(canvas, fullName, btn, originalHTML);
                     });
-                } else {
+                } catch (e) {
                     fallbackDownloadCanvas(canvas, fullName, btn, originalHTML);
                 }
             }, 'image/png');
@@ -896,7 +974,9 @@
             const link = document.createElement('a');
             link.download = `MicroHabits_Certificate_${fullName.replace(/\s+/g, '_')}.png`;
             link.href = canvas.toDataURL('image/png');
+            document.body.appendChild(link);
             link.click();
+            document.body.removeChild(link);
             btn.innerHTML = `<i class="fa-solid fa-download mr-1"></i> Downloaded Successfully!`;
             setTimeout(() => { btn.innerHTML = originalHTML; }, 3000);
         }
