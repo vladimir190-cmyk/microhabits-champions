@@ -41,18 +41,18 @@
         }
 
         .glass-panel-3d {
-            background: rgba(13, 17, 38, 0.7);
+            background: rgba(13, 17, 38, 0.75);
             backdrop-filter: blur(25px);
             -webkit-backdrop-filter: blur(25px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.7), inset 0 1px 1px rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(0, 240, 255, 0.2);
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.8), inset 0 1px 1px rgba(255, 255, 255, 0.25);
             transform-style: preserve-3d;
             transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         .glass-panel-3d:hover {
-            border-color: rgba(0, 240, 255, 0.4);
-            box-shadow: 0 25px 50px -10px rgba(0, 240, 255, 0.25), inset 0 1px 2px rgba(255, 255, 255, 0.3);
+            border-color: rgba(0, 240, 255, 0.6);
+            box-shadow: 0 25px 50px -10px rgba(0, 240, 255, 0.3), inset 0 1px 2px rgba(255, 255, 255, 0.4);
         }
 
         .card-3d-tilt {
@@ -62,12 +62,12 @@
 
         .card-3d-tilt:hover {
             transform: translateY(-8px) rotateX(6deg) rotateY(-3deg) scale(1.02);
-            box-shadow: 0 25px 45px -10px rgba(112, 0, 255, 0.4);
+            box-shadow: 0 25px 45px -10px rgba(112, 0, 255, 0.5);
         }
 
         .gold-border-glow {
-            border: 1px solid rgba(234, 179, 8, 0.6);
-            box-shadow: 0 0 35px rgba(234, 179, 8, 0.35), inset 0 0 20px rgba(234, 179, 8, 0.2);
+            border: 1px solid rgba(234, 179, 8, 0.7);
+            box-shadow: 0 0 35px rgba(234, 179, 8, 0.4), inset 0 0 20px rgba(234, 179, 8, 0.25);
         }
 
         .fireworks-canvas {
@@ -85,7 +85,7 @@
             width: 6px;
         }
         ::-webkit-scrollbar-track {
-            background: rgba(13, 17, 38, 0.8);
+            background: rgba(13, 17, 38, 0.9);
         }
         ::-webkit-scrollbar-thumb {
             background: linear-gradient(to bottom, #00f0ff, #7000ff);
@@ -94,14 +94,14 @@
 
         /* AI Roast & Toast Styles */
         .ai-roast-card {
-            background: rgba(18, 10, 36, 0.75);
-            border: 1px solid rgba(255, 0, 127, 0.4);
+            background: rgba(18, 10, 36, 0.8);
+            border: 1px solid rgba(255, 0, 127, 0.5);
             border-radius: 20px;
             padding: 22px;
             margin: 20px 0;
             backdrop-filter: blur(16px);
             color: #ffffff;
-            box-shadow: 0 10px 35px rgba(255, 0, 127, 0.2);
+            box-shadow: 0 10px 35px rgba(255, 0, 127, 0.3);
         }
 
         .roast-header {
@@ -120,7 +120,7 @@
 
         .mode-btn {
             background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.15);
             color: #aaa;
             padding: 6px 14px;
             border-radius: 10px;
@@ -132,17 +132,17 @@
         .mode-btn.active {
             background: linear-gradient(135deg, #ff007f, #7000ff);
             color: #fff;
-            border-color: rgba(255, 0, 127, 0.6);
-            box-shadow: 0 0 15px rgba(255, 0, 127, 0.5);
+            border-color: rgba(255, 0, 127, 0.8);
+            box-shadow: 0 0 20px rgba(255, 0, 127, 0.6);
         }
 
         .roast-body {
-            background: rgba(0, 0, 0, 0.4);
+            background: rgba(0, 0, 0, 0.5);
             padding: 16px;
             border-radius: 14px;
             margin-bottom: 15px;
             border-left: 4px solid #ff007f;
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+            box-shadow: inset 0 0 12px rgba(0,0,0,0.6);
         }
 
         .roast-text {
@@ -170,18 +170,18 @@
             background: linear-gradient(135deg, #00f0ff, #7000ff);
             color: white;
             flex: 1;
-            box-shadow: 0 4px 20px rgba(0, 240, 255, 0.3);
+            box-shadow: 0 4px 20px rgba(0, 240, 255, 0.4);
         }
 
         .share-button {
             background: rgba(255, 255, 255, 0.12);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.25);
             color: white;
         }
 
         .cyber-button:hover, .share-button:hover {
             transform: translateY(-3px);
-            filter: brightness(1.15);
+            filter: brightness(1.2);
         }
     </style>
     <script data-goatcounter="https://microhabits-champions.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
@@ -195,7 +195,7 @@
     <header class="sticky top-0 z-40 glass-panel-3d border-b border-slate-800/80 bg-slate-950/80">
         <div class="max-w-xl mx-auto px-5 py-4 flex justify-between items-center">
             <div class="flex items-center gap-3">
-                <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-cyan-500 via-indigo-500 to-fuchsia-500 flex items-center justify-center shadow-lg shadow-cyan-500/30 transform hover:rotate-6 transition-transform">
+                <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-cyan-500 via-indigo-500 to-fuchsia-500 flex items-center justify-center shadow-lg shadow-cyan-500/40 transform hover:rotate-6 transition-transform">
                     <i class="fa-solid fa-trophy text-amber-300 text-xl"></i>
                 </div>
                 <div>
@@ -207,7 +207,7 @@
             </div>
             
             <div class="flex items-center gap-2.5">
-                <button id="reminderBellBtn" onclick="toggleReminderModal()" class="w-10 h-10 rounded-xl bg-slate-900/90 border border-slate-700/60 hover:border-cyan-400 flex items-center justify-center text-slate-300 hover:text-cyan-400 transition-all relative">
+                <button id="reminderBellBtn" onclick="toggleReminderModal()" class="w-10 h-10 rounded-xl bg-slate-900/90 border border-slate-700/60 hover:border-cyan-400 flex items-center justify-center text-slate-300 hover:text-cyan-400 transition-all relative shadow-cyber-glow">
                     <i class="fa-solid fa-bell text-sm"></i>
                     <span id="reminderActiveBadge" class="hidden absolute top-2 right-2 w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
                 </button>
@@ -229,6 +229,26 @@
                 <span id="selectedDayLabel" class="text-xs font-bold text-cyan-300 bg-cyan-500/10 px-2.5 py-0.5 rounded-md border border-cyan-500/20">Monday</span>
             </div>
             <div id="daySelector" class="grid grid-cols-7 gap-1.5"></div>
+        </section>
+
+        <!-- HLAVNÉ POLIA PRE MENO A PRIEZVISKO V ANGLIČTINE (PRE CERTIFIKÁT) -->
+        <section class="glass-panel-3d rounded-2xl p-4 border border-cyan-500/40 shadow-cyber-glow">
+            <div class="flex items-center justify-between mb-3">
+                <h3 class="text-xs font-extrabold uppercase tracking-wider text-cyan-300 flex items-center gap-1.5">
+                    <i class="fa-solid fa-id-card text-cyan-400"></i> Certificate Holder (EN)
+                </h3>
+                <span class="text-[10px] text-slate-400">Synced with 3D Badge</span>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+                <div>
+                    <label class="block text-[10px] text-slate-300 uppercase font-bold mb-1">First Name</label>
+                    <input type="text" id="mainFirstNameInput" oninput="syncMainNamesToCert()" value="Alex" class="bg-slate-900/90 border border-cyan-500/30 rounded-xl text-white font-black text-sm w-full px-3 py-2.5 focus:outline-none focus:border-cyan-400" placeholder="First Name...">
+                </div>
+                <div>
+                    <label class="block text-[10px] text-slate-300 uppercase font-bold mb-1">Last Name</label>
+                    <input type="text" id="mainLastNameInput" oninput="syncMainNamesToCert()" value="Developer" class="bg-slate-900/90 border border-cyan-500/30 rounded-xl text-white font-black text-sm w-full px-3 py-2.5 focus:outline-none focus:border-cyan-400" placeholder="Last Name...">
+                </div>
+            </div>
         </section>
 
         <!-- Champion Trophy Winner Banner with 3D Fireworks & Certificate Trigger -->
@@ -279,10 +299,10 @@
             </div>
         </section>
 
-        <!-- AI Roast & Toast Modul -->
+        <!-- AI Roast & Toast Modul (Presne 19 virálnych fráz) -->
         <div class="ai-roast-card glass-panel-3d">
             <div class="roast-header">
-                <h3 class="font-extrabold text-xs uppercase tracking-wider text-pink-400 flex items-center gap-1.5"><i class="fa-solid fa-robot"></i> AI Coach: Viral Roast & Toast</h3>
+                <h3 class="font-extrabold text-xs uppercase tracking-wider text-pink-400 flex items-center gap-1.5"><i class="fa-solid fa-robot"></i> AI Coach: Viral Roast & Toast (19 Phrases)</h3>
                 <div class="personality-selector">
                     <button type="button" class="mode-btn active" data-mode="toast">🍞 Toast</button>
                     <button type="button" class="mode-btn" data-mode="roast">🔥 Roast</button>
@@ -442,7 +462,7 @@
                 <i class="fa-solid fa-xmark"></i>
             </button>
             
-            <!-- Tento prvok sa vygeneruje ako PNG obrázok vrátane Vášho Mien a Priezviska -->
+            <!-- Náhľad certifikátu, ktorý sa prenesie na PNG obrázok -->
             <div id="certificateCardPreview" class="p-6 rounded-2xl bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-900 border-2 border-amber-500/70 text-left space-y-4 shadow-2xl relative overflow-hidden">
                 <div class="absolute -top-10 -right-10 w-28 h-28 bg-amber-500/25 rounded-full blur-2xl"></div>
                 <div class="absolute -bottom-10 -left-10 w-28 h-28 bg-cyan-500/20 rounded-full blur-2xl"></div>
@@ -459,33 +479,20 @@
                         <i class="fa-solid fa-award"></i>
                     </div>
                     <h4 class="font-black text-xl text-amber-300 tracking-tight">MICROHABITS CHAMPION</h4>
-                    <p class="text-[11px] text-cyan-200/90 font-bold uppercase tracking-widest bg-amber-500/10 py-1 rounded-md border border-amber-500/30">
-                        100% TASK MASTERY CERTIFIED
+                    <p class="text-[11px] text-amber-300 font-extrabold uppercase tracking-widest bg-amber-500/15 py-1.5 px-3 rounded-lg border border-amber-500/40 shadow-inner">
+                        🏆 100% TASK MASTERY CERTIFIED
                     </p>
                 </div>
 
-                <!-- Dve polia pre First Name & Last Name v angličtine -->
-                <div class="bg-slate-950/90 p-3.5 rounded-xl border border-amber-500/30 space-y-2">
+                <div class="bg-slate-950/90 p-3.5 rounded-xl border border-amber-500/30 space-y-2 text-center">
                     <p class="text-[10px] text-slate-400 uppercase tracking-widest font-bold">Awarded To</p>
-                    <div class="grid grid-cols-2 gap-2">
-                        <div>
-                            <label class="block text-[9px] text-slate-400 uppercase font-bold mb-0.5">First Name</label>
-                            <input type="text" id="champFirstNameInput" oninput="updateCertDisplayName()" value="Alex" class="bg-slate-900/90 border border-slate-700/70 rounded-lg text-white font-black text-xs w-full px-2.5 py-1.5 focus:outline-none focus:border-amber-400" placeholder="First Name...">
-                        </div>
-                        <div>
-                            <label class="block text-[9px] text-slate-400 uppercase font-bold mb-0.5">Last Name</label>
-                            <input type="text" id="champLastNameInput" oninput="updateCertDisplayName()" value="Developer" class="bg-slate-900/90 border border-slate-700/70 rounded-lg text-white font-black text-xs w-full px-2.5 py-1.5 focus:outline-none focus:border-amber-400" placeholder="Last Name...">
-                        </div>
-                    </div>
-                    <div class="pt-1 border-t border-slate-800 text-center">
-                        <span class="text-[10px] text-slate-400">Certificate Holder: </span>
-                        <strong id="certFullDisplayName" class="text-xs text-amber-300 font-extrabold">Alex Developer</strong>
-                    </div>
+                    <strong id="certFullDisplayName" class="text-base text-amber-300 font-black tracking-wide">Alex Developer</strong>
+                    <p class="text-[10px] text-cyan-300 font-medium">For successful 100% completion of all tasks and micro-habits.</p>
                 </div>
 
                 <div class="flex justify-between items-center text-xs pt-1">
                     <span class="bg-amber-500/15 border border-amber-500/40 px-3 py-1 rounded-lg text-amber-300 font-extrabold flex items-center gap-1">
-                        🔥 100% Completed
+                        🔥 100% Success Rate
                     </span>
                     <span class="bg-cyan-500/15 border border-cyan-500/40 px-3 py-1 rounded-lg text-cyan-300 font-extrabold">
                         🏆 Rank: Legend 3000
@@ -773,11 +780,12 @@
             runAiAnalysis();
         };
 
-        // Dynamická aktualizácia celého mena na certifikáte
-        function updateCertDisplayName() {
-            const fn = document.getElementById('champFirstNameInput').value.trim() || 'Alex';
-            const ln = document.getElementById('champLastNameInput').value.trim() || 'Developer';
-            document.getElementById('certFullDisplayName').innerText = `${fn} ${ln}`;
+        // Synchronizácia mena z hlavného panela na certifikát
+        function syncMainNamesToCert() {
+            const fn = document.getElementById('mainFirstNameInput').value.trim() || 'Alex';
+            const ln = document.getElementById('mainLastNameInput').value.trim() || 'Developer';
+            const full = `${fn} ${ln}`;
+            document.getElementById('certFullDisplayName').innerText = full;
         }
 
         // 3D Certificate Modal & Image Clipboard Engine
@@ -786,7 +794,7 @@
             modal.classList.toggle('hidden');
             const options = { year: 'numeric', month: 'short', day: 'numeric' };
             document.getElementById('certDateSpan').innerText = new Date().toLocaleDateString('en-US', options);
-            updateCertDisplayName();
+            syncMainNamesToCert();
         }
 
         function copyCertificateImageToClipboard(event) {
@@ -795,9 +803,9 @@
             btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-1"></i> Generating Image...`;
 
             const card = document.getElementById('certificateCardPreview');
-            const firstName = document.getElementById('champFirstNameInput').value.trim() || 'Alex';
-            const lastName = document.getElementById('champLastNameInput').value.trim() || 'Developer';
-            const fullName = `${firstName} ${lastName}`;
+            const fn = document.getElementById('mainFirstNameInput').value.trim() || 'Alex';
+            const ln = document.getElementById('mainLastNameInput').value.trim() || 'Developer';
+            const fullName = `${fn} ${ln}`;
 
             html2canvas(card, {
                 backgroundColor: '#020617',
@@ -875,7 +883,7 @@
             setTimeout(runAiAnalysis, 600);
         });
 
-        // Presne 19 Motivačných a Virálnych viet (Toast & Roast) v slovenčine a angličtine
+        // Presne 19 virálnych motivačných hlášok (Toast & Roast) v slovenčine a angličtine
         const aiQuotes = {
             toast: [
                 "Skvelá práca! S takýmto tempom zničíš každú prokrastináciu v 3. tisícročí! 🚀",
@@ -909,7 +917,7 @@
                 "Waiting for 'tomorrow' is why 99% never achieve their goals. Start right now!",
                 "Kým ty premýšľaš, ostatní už majú hotovo. Klikni na ten návyk! 💥",
                 "Žiadne výhovorky v 3. tisícročí! Odfúkni prach z predsavzatí a konaj! 🛠️",
-                "Tvoj zoznam úloh vyzerá opustený ako mesto duchov. Sprav s tím niečo! 👻",
+                "Tvoj zoznam úloh vyzerá opustený ako mesto duchov. Sprav s tým niečo! 👻",
                 "Snívať o výsledkoch nestačí, treba aj vstať a odklikať tie políčka! ⏰",
                 "Excuse level: Master. Execution level: Loading... Shake it off and execute!",
                 "Do you want progress or do you want comfortable excuses? Pick one! 🎯",
@@ -1088,6 +1096,7 @@
             runAiAnalysis();
             updateReminderBadge();
             animateFireworks();
+            syncMainNamesToCert();
         };
     </script>
 
