@@ -221,7 +221,7 @@
             <div id="daySelector" class="grid grid-cols-7 gap-1.5"></div>
         </section>
 
-        <!-- Champion Trophy Winner Banner with 3D Fireworks Trigger -->
+        <!-- Champion Trophy Winner Banner with 3D Fireworks & Certificate Trigger -->
         <section id="trophyBanner" class="hidden glass-panel-3d rounded-2xl p-6 gold-border-glow text-center relative overflow-hidden bg-gradient-to-b from-amber-950/60 via-slate-900/90 to-slate-950 transition-all duration-500 card-3d-tilt">
             <div class="absolute -top-12 -right-12 w-32 h-32 bg-amber-500/20 rounded-full blur-3xl"></div>
             <div class="inline-flex w-16 h-16 rounded-2xl bg-gradient-to-tr from-amber-500 via-yellow-400 to-amber-200 items-center justify-center text-slate-950 text-3xl shadow-xl shadow-amber-500/50 mb-3 animate-bounce">
@@ -231,9 +231,14 @@
             <p class="text-xs text-slate-200 max-w-sm mx-auto leading-relaxed font-medium mb-3">
                 You hit 100% completion today! Your consistency is forming legendary micro-habits.
             </p>
-            <button onclick="trigger3DFireworks()" class="bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-950 font-black text-xs px-5 py-2.5 rounded-xl shadow-lg shadow-amber-500/30 hover:brightness-110 active:scale-95 transition">
-                <i class="fa-solid fa-fire text-xs mr-1"></i> LAUNCH 3D FIREWORKS
-            </button>
+            <div class="flex flex-wrap justify-center gap-2">
+                <button onclick="trigger3DFireworks()" class="bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-950 font-black text-xs px-4 py-2.5 rounded-xl shadow-lg shadow-amber-500/30 hover:brightness-110 active:scale-95 transition">
+                    <i class="fa-solid fa-fire text-xs mr-1"></i> LAUNCH FIREWORKS
+                </button>
+                <button onclick="openCertificateModal()" class="bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-black text-xs px-4 py-2.5 rounded-xl shadow-lg shadow-indigo-600/30 hover:brightness-110 active:scale-95 transition">
+                    <i class="fa-solid fa-certificate text-xs mr-1"></i> VIEW 3D BADGE & SHARE
+                </button>
+            </div>
         </section>
 
         <!-- AI Coach & Daily Progress Analysis Box -->
@@ -415,6 +420,48 @@
 
                 <button onclick="saveReminderSettings()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 rounded-xl transition shadow-lg shadow-indigo-600/30">
                     Save Notification Settings
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3D Champion Certificate / Badge Modal -->
+    <div id="certificateModal" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-panel-3d max-w-md w-full rounded-3xl p-6 border border-amber-500/40 relative gold-border-glow text-center space-y-4">
+            <button onclick="openCertificateModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-sm">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            
+            <div class="inline-flex w-16 h-16 rounded-2xl bg-gradient-to-tr from-amber-500 via-yellow-400 to-amber-200 items-center justify-center text-slate-950 text-3xl shadow-xl shadow-amber-500/50 mb-1">
+                <i class="fa-solid fa-certificate"></i>
+            </div>
+            
+            <div>
+                <h3 class="font-black text-xl text-amber-300 tracking-tight">CHAMPION CERTIFICATE</h3>
+                <p class="text-xs text-indigo-200">MicroHabits AI – 3D Glassmorphism Edition</p>
+            </div>
+
+            <div id="certificateCardPreview" class="p-5 rounded-2xl bg-gradient-to-br from-slate-900 via-indigo-950/60 to-slate-950 border border-indigo-500/30 text-left space-y-3 shadow-inner">
+                <div class="flex justify-between items-center text-[11px] text-indigo-300 font-bold uppercase tracking-wider">
+                    <span>Verified 3D Streak</span>
+                    <span id="certDateSpan" class="text-amber-400">Today</span>
+                </div>
+                <div class="border-t border-slate-800 pt-2">
+                    <p class="text-xs text-slate-400">Awarded to Master of Consistency:</p>
+                    <input type="text" id="champNameInput" value="Champion Developer" class="bg-transparent border-b border-indigo-500/50 text-white font-black text-sm w-full py-1 focus:outline-none focus:border-amber-400" placeholder="Enter your name...">
+                </div>
+                <div class="flex justify-between items-center text-xs pt-1 text-slate-300">
+                    <span>🔥 Status: <strong class="text-amber-300">100% Completed</strong></span>
+                    <span>🏆 Rank: <strong class="text-indigo-300">Legend</strong></span>
+                </div>
+            </div>
+
+            <div class="flex gap-2 pt-2">
+                <button onclick="copyCertificateShareText()" class="flex-1 bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-950 font-extrabold py-3 rounded-xl text-xs shadow-lg shadow-amber-500/20 hover:brightness-110 transition active:scale-95">
+                    <i class="fa-solid fa-share-nodes mr-1"></i> Share Certificate
+                </button>
+                <button onclick="openCertificateModal()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-4 py-3 rounded-xl font-bold text-xs border border-slate-700 transition">
+                    Close
                 </button>
             </div>
         </div>
@@ -688,6 +735,23 @@
             saveAndRender();
             runAiAnalysis();
         };
+
+        // 3D Certificate Modal Controller
+        function openCertificateModal() {
+            const modal = document.getElementById('certificateModal');
+            modal.classList.toggle('hidden');
+            const options = { year: 'numeric', month: 'short', day: 'numeric' };
+            document.getElementById('certDateSpan').innerText = new Date().toLocaleDateString('en-US', options);
+        }
+
+        function copyCertificateShareText() {
+            const name = document.getElementById('champNameInput').value || 'Champion';
+            const shareText = `🏆 I just unlocked 100% completion today on MicroHabits AI – Champions 3D Edition! Certified Master of Consistency. Check out the app! 🚀`;
+            navigator.clipboard.writeText(shareText).then(() => {
+                alert(`✅ Certificate & share text copied to clipboard! Ready to post on LinkedIn or Facebook.`);
+                openCertificateModal();
+            });
+        }
 
         function runAiAnalysis() {
             const habits = dailyHabitsData[selectedDayIndex] || [];
