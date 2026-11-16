@@ -31,3 +31,7 @@ MicroHabits Champions je moderná a interaktívna webová aplikácia navrhnutá 
 
 * **Live Demo:** [https://vladimir190-cmyk.github.io/microhabits-champions/](https://vladimir190-cmyk.github.io/microhabits-champions/)
 * **GitHub Repozitár:** [https://github.com/vladimir190-cmyk/microhabits-champions](https://github.com/vladimir190-cmyk/microhabits-champions)
+
+
+<img width="346" height="413" alt="3" src="https://github.com/user-attachments/assets/46365938-88b5-453a-8205-e1b2181b6ba7" />
+
