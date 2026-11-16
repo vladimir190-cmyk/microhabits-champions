@@ -494,142 +494,178 @@
         </div>
     </div>
 
-    <!-- Application Core Script -->
+    <!-- Application Core Script (s integrovanou dvojitou ochranou a štrukturálnou obfuskáciou) -->
     <script>
-        const daysOfWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+        // --- INTEGROVANÁ DVOJITÁ OCHRANA: ANTI-DEBUGGING LOCK & CONSOLE/F12 DEFENSE ---
+        (function() {
+            // 1. Blokovanie klávesových skratiek F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U, Ctrl+S
+            window.addEventListener('keydown', function(e) {
+                if (
+                    e.keyCode === 123 || // F12
+                    (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) || // Ctrl+Shift+I/J/C
+                    (e.ctrlKey && e.keyCode === 85) || // Ctrl+U (View Source)
+                    (e.ctrlKey && e.keyCode === 83)    // Ctrl+S (Save)
+                ) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    return false;
+                }
+            }, true);
+
+            // 2. Blokovanie kontextového menu pravým tlačidlom myši
+            document.addEventListener('contextmenu', function(e) {
+                e.preventDefault();
+                return false;
+            }, true);
+
+            // 3. Pokročilý anti-debugging detektor konzoly a debugger trap
+            const _0x301a = function() {
+                const _t = new Date().getTime();
+                debugger;
+                const _t2 = new Date().getTime();
+                if (_t2 - _t > 100) {
+                    document.body.innerHTML = '<div style="display:flex;justify-content:center;align-items:center;height:100vh;background:#02010a;color:#00f0ff;font-family:sans-serif;text-align:center;padding:20px;"><div><h1 style="font-size:2rem;margin-bottom:10px;">🛡️ SECURITY PROTOCOL ACTIVE</h1><p>Debugging & Console inspection blocked by MicroHabits 3D Protocol.</p></div></div>';
+                    window.location.href = "about:blank";
+                }
+            };
+            setInterval(_0x301a, 1000);
+        })();
+
+        // --- ŠTRUKTURÁLNE OBFUSKOVANÝ JÁDROVÝ KÓD ---
+        const _0xd41a = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
         
-        let selectedDayIndex = localStorage.getItem('selectedDayIndex_en') !== null 
+        let _0x51b2 = localStorage.getItem('selectedDayIndex_en') !== null 
             ? parseInt(localStorage.getItem('selectedDayIndex_en')) 
             : (new Date().getDay() === 0 ? 6 : new Date().getDay() - 1);
 
-        let dailyHabitsData = JSON.parse(localStorage.getItem('microHabits_daily_v2')) || {
+        let _0x8c99 = JSON.parse(localStorage.getItem('microHabits_daily_v2')) || {
             0: [{ id: 1, title: 'Drink 2.5L pure water', completed: true, streak: 5, category: 'water' }],
             1: [{ id: 2, title: '15m morning sunlight', completed: true, streak: 3, category: 'sunlight' }],
             2: [], 3: [], 4: [], 5: [], 6: []
         };
 
-        let weeklyHistory = JSON.parse(localStorage.getItem('weeklyHistory_en')) || [100, 100, 40, 80, 60, 50, 0];
-        let reminderSettings = JSON.parse(localStorage.getItem('reminderSettings')) || { enabled: false, time: '09:00' };
+        let _0x29fa = JSON.parse(localStorage.getItem('weeklyHistory_en')) || [100, 100, 40, 80, 60, 50, 0];
+        let _0x112b = JSON.parse(localStorage.getItem('reminderSettings')) || { enabled: false, time: '09:00' };
 
-        const daySelectorEl = document.getElementById('daySelector');
-        const habitsListEl = document.getElementById('habitsList');
-        const habitInput = document.getElementById('habitInput');
-        const progressStatsEl = document.getElementById('progressStats');
-        const aiInsightText = document.getElementById('aiInsightText');
-        const aiActionableTips = document.getElementById('aiActionableTips');
-        const completionBadge = document.getElementById('completionBadge');
-        const weeklyChartEl = document.getElementById('weeklyChart');
-        const weeklyAvgEl = document.getElementById('weeklyAvg');
-        const trophyBanner = document.getElementById('trophyBanner');
-        const selectedDayLabel = document.getElementById('selectedDayLabel');
+        const _0x991f = document.getElementById('daySelector');
+        const _0x331c = document.getElementById('habitsList');
+        const _0x442d = document.getElementById('habitInput');
+        const _0x553e = document.getElementById('progressStats');
+        const _0x664f = document.getElementById('aiInsightText');
+        const _0x775a = document.getElementById('aiActionableTips');
+        const _0x886b = document.getElementById('completionBadge');
+        const _0x997c = document.getElementById('weeklyChart');
+        const _0x108d = document.getElementById('weeklyAvg');
+        const _0x219e = document.getElementById('trophyBanner');
+        const _0x320f = document.getElementById('selectedDayLabel');
 
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const _0x431a = new (window.AudioContext || window.webkitAudioContext)();
 
-        function playCheckSound() {
-            if (audioCtx.state === 'suspended') audioCtx.resume();
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.type = 'sine';
-            osc.frequency.setValueAtTime(523.25, audioCtx.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.15);
-            gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            osc.start();
-            osc.stop(audioCtx.currentTime + 0.15);
+        function _0x542b() {
+            if (_0x431a.state === 'suspended') _0x431a.resume();
+            const _osc = _0x431a.createOscillator();
+            const _gain = _0x431a.createGain();
+            _osc.type = 'sine';
+            _osc.frequency.setValueAtTime(523.25, _0x431a.currentTime);
+            _osc.frequency.exponentialRampToValueAtTime(880, _0x431a.currentTime + 0.15);
+            _gain.gain.setValueAtTime(0.2, _0x431a.currentTime);
+            _gain.gain.exponentialRampToValueAtTime(0.01, _0x431a.currentTime + 0.15);
+            _osc.connect(_gain);
+            _gain.connect(_0x431a.destination);
+            _osc.start();
+            _osc.stop(_0x431a.currentTime + 0.15);
         }
 
-        function playVictorySound() {
-            if (audioCtx.state === 'suspended') audioCtx.resume();
-            const notes = [523.25, 659.25, 783.99, 1046.50];
-            notes.forEach((freq, idx) => {
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                osc.type = 'triangle';
-                osc.frequency.setValueAtTime(freq, audioCtx.currentTime + idx * 0.1);
-                gain.gain.setValueAtTime(0.25, audioCtx.currentTime + idx * 0.1);
-                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + idx * 0.1 + 0.35);
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-                osc.start(audioCtx.currentTime + idx * 0.1);
-                osc.stop(audioCtx.currentTime + idx * 0.1 + 0.35);
+        function _0x653c() {
+            if (_0x431a.state === 'suspended') _0x431a.resume();
+            const _notes = [523.25, 659.25, 783.99, 1046.50];
+            _notes.forEach((freq, idx) => {
+                const _osc = _0x431a.createOscillator();
+                const _gain = _0x431a.createGain();
+                _osc.type = 'triangle';
+                _osc.frequency.setValueAtTime(freq, _0x431a.currentTime + idx * 0.1);
+                _gain.gain.setValueAtTime(0.25, _0x431a.currentTime + idx * 0.1);
+                _gain.gain.exponentialRampToValueAtTime(0.01, _0x431a.currentTime + idx * 0.1 + 0.35);
+                _osc.connect(_gain);
+                _gain.connect(_0x431a.destination);
+                _osc.start(_0x431a.currentTime + idx * 0.1);
+                _osc.stop(_0x431a.currentTime + idx * 0.1 + 0.35);
             });
         }
 
-        function saveData() {
-            localStorage.setItem('microHabits_daily_v2', JSON.stringify(dailyHabitsData));
-            localStorage.setItem('weeklyHistory_en', JSON.stringify(weeklyHistory));
-            localStorage.setItem('selectedDayIndex_en', selectedDayIndex);
-            localStorage.setItem('reminderSettings', JSON.stringify(reminderSettings));
+        function _0x764d() {
+            localStorage.setItem('microHabits_daily_v2', JSON.stringify(_0x8c99));
+            localStorage.setItem('weeklyHistory_en', JSON.stringify(_0x29fa));
+            localStorage.setItem('selectedDayIndex_en', _0x51b2);
+            localStorage.setItem('reminderSettings', JSON.stringify(_0x112b));
         }
 
-        function renderDaySelector() {
-            if (!daySelectorEl) return;
-            daySelectorEl.innerHTML = '';
-            daysOfWeek.forEach((day, index) => {
-                const btn = document.createElement('button');
-                const isSelected = index === selectedDayIndex;
-                btn.type = 'button';
-                btn.className = `py-2.5 rounded-xl text-xs font-extrabold transition-all duration-200 border ${
-                    isSelected 
+        function _0x875e() {
+            if (!_0x991f) return;
+            _0x991f.innerHTML = '';
+            _0xd41a.forEach((day, index) => {
+                const _btn = document.createElement('button');
+                const _isSelected = index === _0x51b2;
+                _btn.type = 'button';
+                _btn.className = `py-2.5 rounded-xl text-xs font-extrabold transition-all duration-200 border ${
+                    _isSelected 
                         ? 'bg-gradient-to-b from-cyan-500 to-indigo-700 border-cyan-400 text-white shadow-lg shadow-cyan-500/40 scale-105' 
                         : 'bg-slate-900/80 border-slate-800 text-slate-400 hover:bg-slate-800'
                 }`;
-                btn.innerText = day;
-                btn.onclick = () => {
-                    selectedDayIndex = index;
-                    if(selectedDayLabel) selectedDayLabel.innerText = daysOfWeek[index];
-                    saveData();
-                    renderDaySelector();
-                    saveAndRender();
-                    runAiAnalysis();
+                _btn.innerText = day;
+                _btn.onclick = () => {
+                    _0x51b2 = index;
+                    if(_0x320f) _0x320f.innerText = _0xd41a[index];
+                    _0x764d();
+                    _0x875e();
+                    _0x986f();
+                    _0xa97a();
                 };
-                daySelectorEl.appendChild(btn);
+                _0x991f.appendChild(_btn);
             });
-            if(selectedDayLabel) selectedDayLabel.innerText = daysOfWeek[selectedDayIndex];
+            if(_0x320f) _0x320f.innerText = _0xd41a[_0x51b2];
         }
 
-        function updateDayInHistory() {
-            const habits = dailyHabitsData[selectedDayIndex] || [];
-            const total = habits.length;
-            const completed = habits.filter(h => h.completed).length;
-            const dayPct = total > 0 ? Math.round((completed / total) * 100) : 0;
-            weeklyHistory[selectedDayIndex] = dayPct;
-            saveData();
+        function _0x986f() {
+            const _habits = _0x8c99[_0x51b2] || [];
+            const _total = _habits.length;
+            const _completed = _habits.filter(h => h.completed).length;
+            const _dayPct = _total > 0 ? Math.round((_completed / _total) * 100) : 0;
+            _0x29fa[_0x51b2] = _dayPct;
+            _0x764d();
         }
 
-        function renderWeeklyChart() {
-            if (!weeklyChartEl) return;
-            weeklyChartEl.innerHTML = '';
-            let sum = 0;
+        function _0xa97a() {
+            if (!_0x997c) return;
+            _0x997c.innerHTML = '';
+            let _sum = 0;
             
-            weeklyHistory.forEach((pct, index) => {
-                sum += pct;
-                const isCurrent = index === selectedDayIndex;
-                const barContainer = document.createElement('div');
-                barContainer.className = 'flex flex-col items-center gap-1.5 h-full justify-end cursor-pointer';
-                barContainer.onclick = () => {
-                    selectedDayIndex = index;
-                    renderDaySelector();
-                    saveAndRender();
+            _0x29fa.forEach((pct, index) => {
+                _sum += pct;
+                const _isCurrent = index === _0x51b2;
+                const _barContainer = document.createElement('div');
+                _barContainer.className = 'flex flex-col items-center gap-1.5 h-full justify-end cursor-pointer';
+                _barContainer.onclick = () => {
+                    _0x51b2 = index;
+                    _0x875e();
+                    _0xb08b();
                 };
                 
-                barContainer.innerHTML = `
+                _barContainer.innerHTML = `
                     <div class="text-[10px] text-cyan-300 font-extrabold">${pct}%</div>
                     <div class="w-full bg-slate-900 rounded-t-lg h-full max-h-[80px] flex items-end overflow-hidden p-0.5 border border-slate-800">
-                        <div class="w-full rounded-t-md transition-all duration-500 ${isCurrent ? 'bg-gradient-to-t from-cyan-500 via-indigo-500 to-fuchsia-400' : 'bg-slate-700/80'}" style="height: ${Math.max(pct, 8)}%;"></div>
+                        <div class="w-full rounded-t-md transition-all duration-500 ${_isCurrent ? 'bg-gradient-to-t from-cyan-500 via-indigo-500 to-fuchsia-400' : 'bg-slate-700/80'}" style="height: ${Math.max(pct, 8)}%;"></div>
                     </div>
-                    <div class="text-[11px] font-bold ${isCurrent ? 'text-cyan-400' : 'text-slate-500'}">${daysOfWeek[index]}</div>
+                    <div class="text-[11px] font-bold ${_isCurrent ? 'text-cyan-400' : 'text-slate-500'}">${_0xd41a[index]}</div>
                 `;
-                weeklyChartEl.appendChild(barContainer);
+                _0x997c.appendChild(_barContainer);
             });
 
-            const avg = Math.round(sum / 7);
-            if(weeklyAvgEl) weeklyAvgEl.innerText = `${avg}% Avg`;
+            const _avg = Math.round(_sum / 7);
+            if(_0x108d) _0x108d.innerText = `${_avg}% Avg`;
         }
 
-        function getHabitColorStyle(category) {
+        function _0xc19c(category) {
             switch(category) {
                 case 'water': return 'border-cyan-500/40 bg-cyan-950/30 text-cyan-200';
                 case 'sunlight': return 'border-amber-500/40 bg-amber-950/30 text-amber-200';
@@ -642,30 +678,30 @@
             }
         }
 
-        function renderHabits() {
-            if (!habitsListEl) return;
-            const habits = dailyHabitsData[selectedDayIndex] || [];
-            habitsListEl.innerHTML = '';
+        function _0xd20d() {
+            if (!_0x331c) return;
+            const _habits = _0x8c99[_0x51b2] || [];
+            _0x331c.innerHTML = '';
 
-            if (habits.length === 0) {
-                habitsListEl.innerHTML = `
+            if (_habits.length === 0) {
+                _0x331c.innerHTML = `
                     <div class="text-center py-10 glass-panel-3d rounded-2xl border border-slate-800">
                         <i class="fa-solid fa-list-check text-slate-600 text-3xl mb-2"></i>
-                        <p class="text-slate-400 text-sm font-medium">No habits logged for ${daysOfWeek[selectedDayIndex]}.</p>
+                        <p class="text-slate-400 text-sm font-medium">No habits logged for ${_0xd41a[_0x51b2]}.</p>
                         <p class="text-slate-500 text-xs mt-1">Tap a 3D health pillar above or create a custom task!</p>
                     </div>`;
                 return;
             }
 
-            habits.forEach(habit => {
-                const colorClass = getHabitColorStyle(habit.category);
-                const card = document.createElement('div');
-                card.className = `flex items-center justify-between p-4 rounded-xl border transition-all duration-200 ${
+            _habits.forEach(habit => {
+                const _colorClass = _0xc19c(habit.category);
+                const _card = document.createElement('div');
+                _card.className = `flex items-center justify-between p-4 rounded-xl border transition-all duration-200 ${
                     habit.completed 
                         ? 'opacity-60 bg-slate-900/40 border-slate-800/80 text-slate-500 line-through' 
-                        : `${colorClass} hover:border-cyan-500/50 shadow-md`
+                        : `${_colorClass} hover:border-cyan-500/50 shadow-md`
                 }`;
-                card.innerHTML = `
+                _card.innerHTML = `
                     <div class="flex items-center gap-3.5 cursor-pointer select-none flex-1" onclick="toggleHabit(${habit.id})">
                         <div class="w-6 h-6 rounded-lg border transition-all flex items-center justify-center text-xs font-bold ${
                             habit.completed 
@@ -685,351 +721,333 @@
                         </button>
                     </div>
                 `;
-                habitsListEl.appendChild(card);
+                _0x331c.appendChild(_card);
             });
         }
 
-        let trophyPlayed = false;
+        let _0xe31e = false;
 
-        function updateStats() {
-            const habits = dailyHabitsData[selectedDayIndex] || [];
-            const completedCount = habits.filter(h => h.completed).length;
-            const total = habits.length;
-            const pct = total > 0 ? Math.round((completedCount / total) * 100) : 0;
+        function _0xf42f() {
+            const _habits = _0x8c99[_0x51b2] || [];
+            const _completedCount = _habits.filter(h => h.completed).length;
+            const _total = _habits.length;
+            const _pct = _total > 0 ? Math.round((_completedCount / _total) * 100) : 0;
             
-            if(progressStatsEl) progressStatsEl.innerText = `${completedCount} / ${total} Completed`;
-            if(completionBadge) completionBadge.innerText = `${pct}% for ${daysOfWeek[selectedDayIndex]}`;
+            if(_0x553e) _0x553e.innerText = `${_completedCount} / ${_total} Completed`;
+            if(_0x886b) _0x886b.innerText = `${_pct}% for ${_0xd41a[_0x51b2]}`;
 
-            updateDayInHistory();
-            renderWeeklyChart();
+            _0x986f();
+            _0xa97a();
 
-            if (total > 0 && pct === 100) {
-                if(trophyBanner) trophyBanner.classList.remove('hidden');
-                if (!trophyPlayed) {
-                    playVictorySound();
+            if (_total > 0 && _pct === 100) {
+                if(_0x219e) _0x219e.classList.remove('hidden');
+                if (!_0xe31e) {
+                    _0x653c();
                     trigger3DFireworks();
-                    trophyPlayed = true;
+                    _0xe31e = true;
                 }
             } else {
-                if(trophyBanner) trophyBanner.classList.add('hidden');
-                trophyPlayed = false;
+                if(_0x219e) _0x219e.classList.add('hidden');
+                _0xe31e = false;
             }
         }
 
-        function saveAndRender() {
-            saveData();
-            renderHabits();
-            updateStats();
+        function _0xb08b() {
+            _0x764d();
+            _0xd20d();
+            _0xf42f();
         }
 
-        const addHabitFormEl = document.getElementById('addHabitForm');
-        if (addHabitFormEl) {
-            addHabitFormEl.addEventListener('submit', (e) => {
+        const _0xaddForm = document.getElementById('addHabitForm');
+        if (_0xaddForm) {
+            _0xaddForm.addEventListener('submit', (e) => {
                 e.preventDefault();
-                const title = habitInput.value.trim();
-                if (!title) return;
+                const _title = _0x442d.value.trim();
+                if (!_title) return;
                 
-                if (!dailyHabitsData[selectedDayIndex]) dailyHabitsData[selectedDayIndex] = [];
-                dailyHabitsData[selectedDayIndex].push({ id: Date.now(), title: title, completed: false, streak: 1, category: 'custom' });
-                habitInput.value = '';
-                playCheckSound();
-                saveAndRender();
-                runAiAnalysis();
+                if (!_0x8c99[_0x51b2]) _0x8c99[_0x51b2] = [];
+                _0x8c99[_0x51b2].push({ id: Date.now(), title: _title, completed: false, streak: 1, category: 'custom' });
+                _0x442d.value = '';
+                _0x542b();
+                _0xb08b();
+                _0x153a();
             });
         }
 
         window.addPillarHabit = function(titleText, categoryKey) {
-            if (!dailyHabitsData[selectedDayIndex]) dailyHabitsData[selectedDayIndex] = [];
-            const habits = dailyHabitsData[selectedDayIndex];
+            if (!_0x8c99[_0x51b2]) _0x8c99[_0x51b2] = [];
+            const _habits = _0x8c99[_0x51b2];
             
-            if (habits.some(h => h.title.toLowerCase() === titleText.toLowerCase())) return;
-            habits.push({ id: Date.now(), title: titleText, completed: false, streak: 1, category: categoryKey });
-            playCheckSound();
-            saveAndRender();
-            runAiAnalysis();
+            if (_habits.some(h => h.title.toLowerCase() === titleText.toLowerCase())) return;
+            _habits.push({ id: Date.now(), title: titleText, completed: false, streak: 1, category: categoryKey });
+            _0x542b();
+            _0xb08b();
+            _0x153a();
         };
 
         window.toggleHabit = function(id) {
-            const habits = dailyHabitsData[selectedDayIndex] || [];
-            dailyHabitsData[selectedDayIndex] = habits.map(h => {
+            const _habits = _0x8c99[_0x51b2] || [];
+            _0x8c99[_0x51b2] = _habits.map(h => {
                 if (h.id === id) {
-                    const newStatus = !h.completed;
-                    if (newStatus) playCheckSound();
-                    return { ...h, completed: newStatus, streak: newStatus ? h.streak + 1 : Math.max(1, h.streak - 1) };
+                    const _newStatus = !h.completed;
+                    if (_newStatus) _0x542b();
+                    return { ...h, completed: _newStatus, streak: _newStatus ? h.streak + 1 : Math.max(1, h.streak - 1) };
                 }
                 return h;
             });
-            saveAndRender();
-            runAiAnalysis();
+            _0xb08b();
+            _0x153a();
         };
 
         window.deleteHabit = function(id) {
-            const habits = dailyHabitsData[selectedDayIndex] || [];
-            dailyHabitsData[selectedDayIndex] = habits.filter(h => h.id !== id);
-            saveAndRender();
-            runAiAnalysis();
+            const _habits = _0x8c99[_0x51b2] || [];
+            _0x8c99[_0x51b2] = _habits.filter(h => h.id !== id);
+            _0xb08b();
+            _0x153a();
         };
 
         function syncMainNamesToCert() {
-            const fnInput = document.getElementById('mainFirstNameInput');
-            const lnInput = document.getElementById('mainLastNameInput');
-            const certName = document.getElementById('certFullDisplayName');
+            const _fnInput = document.getElementById('mainFirstNameInput');
+            const _lnInput = document.getElementById('mainLastNameInput');
+            const _certName = document.getElementById('certFullDisplayName');
             
-            const fn = fnInput ? fnInput.value.trim() : 'Alex';
-            const ln = lnInput ? lnInput.value.trim() : 'Developer';
-            const full = `${fn} ${ln}`;
-            if(certName) certName.innerText = full;
+            const _fn = _fnInput ? _fnInput.value.trim() : 'Alex';
+            const _ln = _lnInput ? _lnInput.value.trim() : 'Developer';
+            const _full = `${_fn} ${_ln}`;
+            if(_certName) _certName.innerText = _full;
         }
 
         function openCertificateModal() {
-            const modal = document.getElementById('certificateModal');
-            if(modal) modal.classList.toggle('hidden');
-            const options = { year: 'numeric', month: 'short', day: 'numeric' };
-            const certDate = document.getElementById('certDateSpan');
-            if(certDate) certDate.innerText = new Date().toLocaleDateString('en-US', options);
+            const _modal = document.getElementById('certificateModal');
+            if(_modal) _modal.classList.toggle('hidden');
+            const _options = { year: 'numeric', month: 'short', day: 'numeric' };
+            const _certDate = document.getElementById('certDateSpan');
+            if(_certDate) _certDate.innerText = new Date().toLocaleDateString('en-US', _options);
             syncMainNamesToCert();
         }
 
-        // VYSOKO MODERNÝ PROFI 3D CANVASA CERTIFIKÁT ENGINE
         function copyCertificateImageToClipboardDirect(event) {
-            const btn = event.currentTarget;
-            const originalHTML = btn.innerHTML;
-            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-1"></i> Rendering 3D Certificate...`;
+            const _btn = event.currentTarget;
+            const _originalHTML = _btn.innerHTML;
+            _btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-1"></i> Rendering 3D Certificate...`;
 
-            const fnInput = document.getElementById('mainFirstNameInput');
-            const lnInput = document.getElementById('mainLastNameInput');
-            const fn = fnInput ? fnInput.value.trim() : 'Alex';
-            const ln = lnInput ? lnInput.value.trim() : 'Developer';
-            const fullName = `${fn} ${ln}`;
-            const certDate = document.getElementById('certDateSpan');
-            const dateStr = certDate ? certDate.innerText : 'Today';
+            const _fnInput = document.getElementById('mainFirstNameInput');
+            const _lnInput = document.getElementById('mainLastNameInput');
+            const _fn = _fnInput ? _fnInput.value.trim() : 'Alex';
+            const _ln = _lnInput ? _lnInput.value.trim() : 'Developer';
+            const _fullName = `${_fn} ${_ln}`;
+            const _certDate = document.getElementById('certDateSpan');
+            const _dateStr = _certDate ? _certDate.innerText : 'Today';
 
-            const canvas = document.createElement('canvas');
-            canvas.width = 1200;
-            canvas.height = 800;
-            const ctx = canvas.getContext('2d');
+            const _canvas = document.createElement('canvas');
+            _canvas.width = 1200;
+            _canvas.height = 800;
+            const _ctx = _canvas.getContext('2d');
 
-            // 1. Tmavý cyber-gradient pozadia
-            const bgGrad = ctx.createRadialGradient(600, 400, 50, 600, 400, 700);
-            bgGrad.addColorStop(0, '#130d2a');
-            bgGrad.addColorStop(0.6, '#0b0618');
-            bgGrad.addColorStop(1, '#030108');
-            ctx.fillStyle = bgGrad;
-            ctx.fillRect(0, 0, 1200, 800);
+            const _bgGrad = _ctx.createRadialGradient(600, 400, 50, 600, 400, 700);
+            _bgGrad.addColorStop(0, '#130d2a');
+            _bgGrad.addColorStop(0.6, '#0b0618');
+            _bgGrad.addColorStop(1, '#030108');
+            _ctx.fillStyle = _bgGrad;
+            _ctx.fillRect(0, 0, 1200, 800);
 
-            // 2. Dekoratívne 3D svietiace gule (Neon Glow Spheres)
-            const drawGlowSphere = (x, y, radius, color) => {
-                const g = ctx.createRadialGradient(x, y, 0, x, y, radius);
-                g.addColorStop(0, color);
-                g.addColorStop(1, 'transparent');
-                ctx.fillStyle = g;
-                ctx.beginPath();
-                ctx.arc(x, y, radius, 0, Math.PI * 2);
-                ctx.fill();
+            const _drawGlowSphere = (x, y, radius, color) => {
+                const _g = _ctx.createRadialGradient(x, y, 0, x, y, radius);
+                _g.addColorStop(0, color);
+                _g.addColorStop(1, 'transparent');
+                _ctx.fillStyle = _g;
+                _ctx.beginPath();
+                _ctx.arc(x, y, radius, 0, Math.PI * 2);
+                _ctx.fill();
             };
-            drawGlowSphere(150, 150, 250, 'rgba(0, 240, 255, 0.25)');
-            drawGlowSphere(1050, 650, 280, 'rgba(255, 0, 127, 0.2)');
-            drawGlowSphere(600, 400, 300, 'rgba(112, 0, 255, 0.15)');
+            _drawGlowSphere(150, 150, 250, 'rgba(0, 240, 255, 0.25)');
+            _drawGlowSphere(1050, 650, 280, 'rgba(255, 0, 127, 0.2)');
+            _drawGlowSphere(600, 400, 300, 'rgba(112, 0, 255, 0.15)');
 
-            // 3. Vonkajší a vnútorný zlatý 3D rám (Double Golden Cyber-Frame)
-            ctx.strokeStyle = 'rgba(234, 179, 8, 0.8)';
-            ctx.lineWidth = 6;
-            ctx.shadowColor = '#facc15';
-            ctx.shadowBlur = 20;
-            ctx.strokeRect(40, 40, 1120, 720);
+            _ctx.strokeStyle = 'rgba(234, 179, 8, 0.8)';
+            _ctx.lineWidth = 6;
+            _ctx.shadowColor = '#facc15';
+            _ctx.shadowBlur = 20;
+            _ctx.strokeRect(40, 40, 1120, 720);
 
-            ctx.strokeStyle = 'rgba(0, 240, 255, 0.5)';
-            ctx.lineWidth = 2;
-            ctx.shadowColor = '#00f0ff';
-            ctx.shadowBlur = 15;
-            ctx.strokeRect(55, 55, 1090, 690);
-            ctx.shadowBlur = 0; // reset shadow
+            _ctx.strokeStyle = 'rgba(0, 240, 255, 0.5)';
+            _ctx.lineWidth = 2;
+            _ctx.shadowColor = '#00f0ff';
+            _ctx.shadowBlur = 15;
+            _ctx.strokeRect(55, 55, 1090, 690);
+            _ctx.shadowBlur = 0;
 
-            // 4. Stredový sklenený panel (Glassmorphism Central Card)
-            ctx.fillStyle = 'rgba(18, 12, 38, 0.82)';
-            ctx.strokeStyle = 'rgba(0, 240, 255, 0.35)';
-            ctx.lineWidth = 2;
-            ctx.beginPath();
-            ctx.roundRect(100, 90, 1000, 620, 24);
-            ctx.fill();
-            ctx.stroke();
+            _ctx.fillStyle = 'rgba(18, 12, 38, 0.82)';
+            _ctx.strokeStyle = 'rgba(0, 240, 255, 0.35)';
+            _ctx.lineWidth = 2;
+            _ctx.beginPath();
+            _ctx.roundRect(100, 90, 1000, 620, 24);
+            _ctx.fill();
+            _ctx.stroke();
 
-            // 5. Hlavička certifikátu
-            ctx.fillStyle = '#00f0ff';
-            ctx.font = 'bold 22px "Plus Jakarta Sans", sans-serif';
-            ctx.fillText('🏆 OFFICIAL MASTER CERTIFICATE', 140, 145);
+            _ctx.fillStyle = '#00f0ff';
+            _ctx.font = 'bold 22px "Plus Jakarta Sans", sans-serif';
+            _ctx.fillText('🏆 OFFICIAL MASTER CERTIFICATE', 140, 145);
 
-            ctx.fillStyle = '#94a3b8';
-            ctx.font = 'bold 18px "Plus Jakarta Sans", sans-serif';
-            ctx.textAlign = 'right';
-            ctx.fillText(`Issued: ${dateStr}`, 1060, 145);
-            ctx.textAlign = 'left';
+            _ctx.fillStyle = '#94a3b8';
+            _ctx.font = 'bold 18px "Plus Jakarta Sans", sans-serif';
+            _ctx.textAlign = 'right';
+            _ctx.fillText(`Issued: ${_dateStr}`, 1060, 145);
+            _ctx.textAlign = 'left';
 
-            // Odddeľovač hlavičky
-            ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
-            ctx.beginPath();
-            ctx.moveTo(140, 165);
-            ctx.lineTo(1060, 165);
-            ctx.stroke();
+            _ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+            _ctx.beginPath();
+            _ctx.moveTo(140, 165);
+            _ctx.lineTo(1060, 165);
+            _ctx.stroke();
 
-            // 6. 3D Zlatá Trofej Ikona / Odznak
-            ctx.shadowColor = '#eab308';
-            ctx.shadowBlur = 25;
-            ctx.fillStyle = '#facc15';
-            ctx.font = '900 64px "Font Awesome 6 Free", sans-serif';
-            ctx.textAlign = 'center';
-            ctx.fillText('🏆', 600, 250);
-            ctx.shadowBlur = 0;
+            _ctx.shadowColor = '#eab308';
+            _ctx.shadowBlur = 25;
+            _ctx.fillStyle = '#facc15';
+            _ctx.font = '900 64px "Font Awesome 6 Free", sans-serif';
+            _ctx.textAlign = 'center';
+            _ctx.fillText('🏆', 600, 250);
+            _ctx.shadowBlur = 0;
 
-            // Hlavný titulok certifikátu
-            const textGrad = ctx.createLinearGradient(400, 0, 800, 0);
-            textGrad.addColorStop(0, '#fde047');
-            textGrad.addColorStop(0.5, '#facc15');
-            textGrad.addColorStop(1, '#eab308');
-            ctx.fillStyle = textGrad;
-            ctx.font = '900 46px "Plus Jakarta Sans", sans-serif';
-            ctx.fillText('MICROHABITS CHAMPION', 600, 310);
+            const _textGrad = _ctx.createLinearGradient(400, 0, 800, 0);
+            _textGrad.addColorStop(0, '#fde047');
+            _textGrad.addColorStop(0.5, '#facc15');
+            _textGrad.addColorStop(1, '#eab308');
+            _ctx.fillStyle = _textGrad;
+            _ctx.font = '900 46px "Plus Jakarta Sans", sans-serif';
+            _ctx.fillText('MICROHABITS CHAMPION', 600, 310);
 
-            // Zlatá stužka - Mastery Status
-            ctx.fillStyle = 'rgba(234, 179, 8, 0.15)';
-            ctx.strokeStyle = 'rgba(234, 179, 8, 0.6)';
-            ctx.lineWidth = 1.5;
-            ctx.beginPath();
-            ctx.roundRect(330, 335, 540, 44, 12);
-            ctx.fill();
-            ctx.stroke();
+            _ctx.fillStyle = 'rgba(234, 179, 8, 0.15)';
+            _ctx.strokeStyle = 'rgba(234, 179, 8, 0.6)';
+            _ctx.lineWidth = 1.5;
+            _ctx.beginPath();
+            _ctx.roundRect(330, 335, 540, 44, 12);
+            _ctx.fill();
+            _ctx.stroke();
 
-            ctx.fillStyle = '#fde047';
-            ctx.font = 'bold 19px "Plus Jakarta Sans", sans-serif';
-            ctx.fillText('VERIFIED 100% DAILY TASK MASTERY', 600, 363);
+            _ctx.fillStyle = '#fde047';
+            _ctx.font = 'bold 19px "Plus Jakarta Sans", sans-serif';
+            _ctx.fillText('VERIFIED 100% DAILY TASK MASTERY', 600, 363);
 
-            // Text pre koho je certifikát
-            ctx.fillStyle = '#94a3b8';
-            ctx.font = 'bold 16px "Plus Jakarta Sans", sans-serif';
-            ctx.fillText('PROUDLY PRESENTED TO', 600, 430);
+            _ctx.fillStyle = '#94a3b8';
+            _ctx.font = 'bold 16px "Plus Jakarta Sans", sans-serif';
+            _ctx.fillText('PROUDLY PRESENTED TO', 600, 430);
 
-            // Meno držiteľa s neónovým efektom
-            ctx.shadowColor = '#00f0ff';
-            ctx.shadowBlur = 20;
-            ctx.fillStyle = '#ffffff';
-            ctx.font = '900 48px "Plus Jakarta Sans", sans-serif';
-            ctx.fillText(fullName, 600, 490);
-            ctx.shadowBlur = 0;
+            _ctx.shadowColor = '#00f0ff';
+            _ctx.shadowBlur = 20;
+            _ctx.fillStyle = '#ffffff';
+            _ctx.font = '900 48px "Plus Jakarta Sans", sans-serif';
+            _ctx.fillText(_fullName, 600, 490);
+            _ctx.shadowBlur = 0;
 
-            // Popisný podtext
-            ctx.fillStyle = '#cbd5e1';
-            ctx.font = '18px "Plus Jakarta Sans", sans-serif';
-            ctx.fillText('For exceptional discipline, focus, and 100% execution across all daily micro-habits.', 600, 535);
+            _ctx.fillStyle = '#cbd5e1';
+            _ctx.font = '18px "Plus Jakarta Sans", sans-serif';
+            _ctx.fillText('For exceptional discipline, focus, and 100% execution across all daily micro-habits.', 600, 535);
 
-            // 7. Spodný štatistický 3D Panel (Stats Bar)
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
-            ctx.strokeStyle = 'rgba(0, 240, 255, 0.3)';
-            ctx.lineWidth = 1;
-            ctx.beginPath();
-            ctx.roundRect(140, 580, 920, 80, 16);
-            ctx.fill();
-            ctx.stroke();
+            _ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
+            _ctx.strokeStyle = 'rgba(0, 240, 255, 0.3)';
+            _ctx.lineWidth = 1;
+            _ctx.beginPath();
+            _ctx.roundRect(140, 580, 920, 80, 16);
+            _ctx.fill();
+            _ctx.stroke();
 
-            // Štatistika 1: Success Rate
-            ctx.fillStyle = '#38bdf8';
-            ctx.font = 'bold 18px "Plus Jakarta Sans", sans-serif';
-            ctx.textAlign = 'left';
-            ctx.fillText('🔥 100% Success Rate', 180, 627);
+            _ctx.fillStyle = '#38bdf8';
+            _ctx.font = 'bold 18px "Plus Jakarta Sans", sans-serif';
+            _ctx.textAlign = 'left';
+            _ctx.fillText('🔥 100% Success Rate', 180, 627);
 
-            // Štatistika 2: Rank
-            ctx.fillStyle = '#f472b6';
-            ctx.font = 'bold 18px "Plus Jakarta Sans", sans-serif';
-            ctx.textAlign = 'center';
-            ctx.fillText('⚡ Rank: Legend 3000', 600, 627);
+            _ctx.fillStyle = '#f472b6';
+            _ctx.font = 'bold 18px "Plus Jakarta Sans", sans-serif';
+            _ctx.textAlign = 'center';
+            _ctx.fillText('⚡ Rank: Legend 3000', 600, 627);
 
-            // Štatistika 3: Protocol
-            ctx.fillStyle = '#34d399';
-            ctx.font = 'bold 18px "Plus Jakarta Sans", sans-serif';
-            ctx.textAlign = 'right';
-            ctx.fillText('🛡️ AI Protocol Verified', 1020, 627);
+            _ctx.fillStyle = '#34d399';
+            _ctx.font = 'bold 18px "Plus Jakarta Sans", sans-serif';
+            _ctx.textAlign = 'right';
+            _ctx.fillText('🛡️ AI Protocol Verified', 1020, 627);
 
-            // Uloženie/Kopírovanie z Canvasu
-            canvas.toBlob(blob => {
+            _canvas.toBlob(blob => {
                 if (!blob) {
-                    btn.innerHTML = `<i class="fa-solid fa-triangle-exclamation mr-1"></i> Render Failed`;
-                    setTimeout(() => { btn.innerHTML = originalHTML; }, 3000);
+                    _btn.innerHTML = `<i class="fa-solid fa-triangle-exclamation mr-1"></i> Render Failed`;
+                    setTimeout(() => { _btn.innerHTML = _originalHTML; }, 3000);
                     return;
                 }
 
                 try {
-                    const item = new ClipboardItem({ 'image/png': blob });
-                    navigator.clipboard.write([item]).then(() => {
-                        btn.innerHTML = `<i class="fa-solid fa-check mr-1"></i> Copied to Clipboard!`;
-                        setTimeout(() => { btn.innerHTML = originalHTML; }, 3000);
+                    const _item = new ClipboardItem({ 'image/png': blob });
+                    navigator.clipboard.write([_item]).then(() => {
+                        _btn.innerHTML = `<i class="fa-solid fa-check mr-1"></i> Copied to Clipboard!`;
+                        setTimeout(() => { _btn.innerHTML = _originalHTML; }, 3000);
                     }).catch(() => {
-                        fallbackDownloadCanvas(canvas, fullName, btn, originalHTML);
+                        _fallbackDownload(_canvas, _fullName, _btn, _originalHTML);
                     });
                 } catch (e) {
-                    fallbackDownloadCanvas(canvas, fullName, btn, originalHTML);
+                    _fallbackDownload(_canvas, _fullName, _btn, _originalHTML);
                 }
             }, 'image/png');
         }
 
-        function fallbackDownloadCanvas(canvas, fullName, btn, originalHTML) {
-            const link = document.createElement('a');
-            link.download = `MicroHabits_Certificate_${fullName.replace(/\s+/g, '_')}.png`;
-            link.href = canvas.toDataURL('image/png');
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+        function _fallbackDownload(canvas, fullName, btn, originalHTML) {
+            const _link = document.createElement('a');
+            _link.download = `MicroHabits_Certificate_${fullName.replace(/\s+/g, '_')}.png`;
+            _link.href = canvas.toDataURL('image/png');
+            document.body.appendChild(_link);
+            _link.click();
+            document.body.removeChild(_link);
             btn.innerHTML = `<i class="fa-solid fa-download mr-1"></i> Downloaded Successfully!`;
             setTimeout(() => { btn.innerHTML = originalHTML; }, 3000);
         }
 
-        function runAiAnalysis() {
-            if (!aiInsightText) return;
-            const habits = dailyHabitsData[selectedDayIndex] || [];
-            const completed = habits.filter(h => h.completed).length;
-            const total = habits.length;
-            const pct = total > 0 ? Math.round((completed / total) * 100) : 0;
+        function _0x153a() {
+            if (!_0x664f) return;
+            const _habits = _0x8c99[_0x51b2] || [];
+            const _completed = _habits.filter(h => h.completed).length;
+            const _total = _habits.length;
+            const _pct = _total > 0 ? Math.round((_completed / _total) * 100) : 0;
             
-            let summary = "";
-            let tips = [];
+            let _summary = "";
+            let _tips = [];
 
-            if (total === 0) {
-                summary = `No activities recorded for ${daysOfWeek[selectedDayIndex]}. Select from the health pillars above to begin building consistency!`;
-            } else if (pct === 100) {
-                summary = `Outstanding execution for ${daysOfWeek[selectedDayIndex]}! You completed all ${total} micro-habits. Discipline is your superpower!`;
-                tips = ["Maintain hydration levels for smooth muscle recovery.", "Log off digital devices early to protect sleep quality."];
-            } else if (pct >= 50) {
-                summary = `Strong progress on ${daysOfWeek[selectedDayIndex]} (${pct}% completed). You completed ${completed} out of ${total} challenges.`;
-                tips = ["Complete remaining pillars to claim today's Champion Trophy.", "Take a quick 10-minute walk to recharge energy."];
+            if (_total === 0) {
+                _summary = `No activities recorded for ${_0xd41a[_0x51b2]}. Select from the health pillars above to begin building consistency!`;
+            } else if (_pct === 100) {
+                _summary = `Outstanding execution for ${_0xd41a[_0x51b2]}! You completed all ${_total} micro-habits. Discipline is your superpower!`;
+                _tips = ["Maintain hydration levels for smooth muscle recovery.", "Log off digital devices early to protect sleep quality."];
+            } else if (_pct >= 50) {
+                _summary = `Strong progress on ${_0xd41a[_0x51b2]} (${_pct}% completed). You completed ${_completed} out of ${_total} challenges.`;
+                _tips = ["Complete remaining pillars to claim today's Champion Trophy.", "Take a quick 10-minute walk to recharge energy."];
             } else {
-                summary = `Building momentum for ${daysOfWeek[selectedDayIndex]}. You completed ${completed} of ${total} micro-habits. Small steps bring massive wins!`;
-                tips = ["Start with the easiest habit to build immediate momentum.", "Drink a glass of water right now to boost focus."];
+                _summary = `Building momentum for ${_0xd41a[_0x51b2]}. You completed ${_completed} of ${_total} micro-habits. Small steps bring massive wins!`;
+                _tips = ["Start with the easiest habit to build immediate momentum.", "Drink a glass of water right now to boost focus."];
             }
 
-            aiInsightText.innerText = summary;
+            _0x664f.innerText = _summary;
             
-            if (aiActionableTips) {
-                if (tips.length > 0) {
-                    aiActionableTips.classList.remove('hidden');
-                    aiActionableTips.innerHTML = tips.map(t => `
+            if (_0x775a) {
+                if (_tips.length > 0) {
+                    _0x775a.classList.remove('hidden');
+                    _0x775a.innerHTML = _tips.map(t => `
                         <div class="flex items-center gap-2 text-xs text-cyan-200">
                             <i class="fa-solid fa-circle-check text-amber-400"></i> ${t}
                         </div>
                     `).join('');
                 } else {
-                    aiActionableTips.classList.add('hidden');
+                    _0x775a.classList.add('hidden');
                 }
             }
         }
 
-        const adviceBtn = document.getElementById('getAiAdviceBtn');
-        if (adviceBtn) {
-            adviceBtn.addEventListener('click', () => {
-                if(aiInsightText) aiInsightText.innerHTML = `<span class="animate-pulse text-cyan-400 font-bold"><i class="fa-solid fa-gear fa-spin"></i> Analyzing daily metrics for ${daysOfWeek[selectedDayIndex]}...</span>`;
-                if(aiActionableTips) aiActionableTips.classList.add('hidden');
-                setTimeout(runAiAnalysis, 600);
+        const _adviceBtn = document.getElementById('getAiAdviceBtn');
+        if (_adviceBtn) {
+            _adviceBtn.addEventListener('click', () => {
+                if(_0x664f) _0x664f.innerHTML = `<span class="animate-pulse text-cyan-400 font-bold"><i class="fa-solid fa-gear fa-spin"></i> Analyzing daily metrics for ${_0xd41a[_0x51b2]}...</span>`;
+                if(_0x775a) _0x775a.classList.add('hidden');
+                setTimeout(_0x153a, 600);
             });
         }
 
-        const aiQuotes = {
+        const _0xaiQuotes = {
             toast: [
                 "Skvelá práca! S takýmto tempom zničíš každú prokrastináciu v 3. tisícročí! 🚀",
                 "Malý krok pre teba, obrovský skok pre tvoj 3D habit streak! Len tak ďalej! 🏆",
@@ -1038,18 +1056,7 @@
                 "Legendárny výkon! Tvoj streak inšpiruje celú vývojársku komunitu! 🔥",
                 "Consistent effort compounds into unstoppable greatness. Outstanding execution! ✨",
                 "You just proved that daily micro-wins build empire-level discipline! 👑",
-                "100% task completion unlocked! You're officially mastering consistency. 🎯",
-                "Disciplína prekoná talent každý deň. Dnes si dominoval na plnej čiare! ⚡",
-                "Nič nezastaví človeka, ktorý si vybudoval železné denné návyky! ⭐",
-                "Krok za krokom k dokonalosti. Tvoja vôľa je silnejšia než kedykoľvek predtým! 💎",
-                "Dnešný 100% výsledok nie je náhoda, ale výsledok tvojej odhodlanosti! 🚀",
-                "Champions don't wait for motivation, they build habits. Legendary job! 🥇",
-                "Today you conquered your list. Tomorrow you conquer your vision! 🌟",
-                "Neuronové siete v tvojom mozgu si práve vytvorili nezničiteľný návyk! 🧠",
-                "Fast tempo, 100% execution, absolute dominance. Keep the momentum high! ⚡",
-                "Vynikajúce! Tvoje denné víťazstvá tvoria základ pre obrovské životné úspechy! 🎉",
-                "Small daily improvements are the key to staggering long-term results! 📈",
-                "Perfektná práca! Odomkol si najvyšší level osobného rozvoja a disciplíny! 🛡️"
+                "100% task completion unlocked! You're officially mastering consistency. 🎯"
             ],
             roast: [
                 "Vážne? Včera veľké reči a dnes zatiaľ nič? Klávesnica plače v kúte! 🔥",
@@ -1058,101 +1065,89 @@
                 "Hovoríš, že 'začneš o chvíľu'? Čakáš, kým skončí vesmír či čo? 😂",
                 "Tvoj streak vyhorel rýchlejšie než raketa bez paliva. Zapni turbo! 🚀",
                 "Procrastination is the thief of your future success. Reset and move now!",
-                "Are you building micro-habits or macro-excuses today? Make a choice! ⚡",
-                "Waiting for 'tomorrow' is why 99% never achieve their goals. Start right now!",
-                "Kým ty premýšľaš, ostatní už majú hotovo. Klikni na ten návyk! 💥",
-                "Žiadne výhovorky v 3. tisícročí! Odfúkni prach z predsavzatí a konaj! 🛠️",
-                "Tvoj zoznam úloh vyzerá opustený ako mesto duchov. Sprav s tým niečo! 👻",
-                "Snívať o výsledkoch nestačí, treba aj vstať a odklikať tie políčka! ⏰",
-                "Excuse level: Master. Execution level: Loading... Shake it off and execute!",
-                "Do you want progress or do you want comfortable excuses? Pick one! 🎯",
-                "Káva vypitá, monitor zapnutý, ale návyky na nule? Čas na zmenu! ☕",
-                "Yesterday you said tomorrow. Don't let today turn into another excuse!",
-                "Jediná prekážka medzi tebou a 100% výsledkom si ty sám. Znič ju! 🔨",
-                "If it was easy, everyone would do it. Stop lagging and level up! 💻",
-                "Prestaň odkladať svoje ciele na pondelok. Dnešok je tvoj deň víťazstva! 🏆"
+                "Are you building micro-habits or macro-excuses today? Make a choice! ⚡"
             ]
         };
 
-        let currentMode = 'toast';
+        let _0xcurrentMode = 'toast';
 
         document.querySelectorAll('.mode-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
                 e.currentTarget.classList.add('active');
-                currentMode = e.currentTarget.getAttribute('data-mode');
-                generateNewQuote();
+                _0xcurrentMode = e.currentTarget.getAttribute('data-mode');
+                _0xgenQuote();
             });
         });
 
-        function generateNewQuote() {
-            const quotesArray = aiQuotes[currentMode];
-            const randomIndex = Math.floor(Math.random() * quotesArray.length);
-            const messageElement = document.getElementById('ai-message');
-            if (!messageElement) return;
+        function _0xgenQuote() {
+            const _arr = _0xaiQuotes[_0xcurrentMode];
+            const _rand = Math.floor(Math.random() * _arr.length);
+            const _msgEl = document.getElementById('ai-message');
+            if (!_msgEl) return;
             
-            messageElement.style.opacity = 0;
+            _msgEl.style.opacity = 0;
             setTimeout(() => {
-                messageElement.textContent = `„${quotesArray[randomIndex]}“`;
-                messageElement.style.opacity = 1;
+                _msgEl.textContent = `„${_arr[_rand]}“`;
+                _msgEl.style.opacity = 1;
             }, 150);
         }
 
-        const genBtn = document.getElementById('generate-btn');
-        if (genBtn) genBtn.addEventListener('click', generateNewQuote);
+        const _genBtn = document.getElementById('generate-btn');
+        if (_genBtn) _genBtn.addEventListener('click', _0xgenQuote);
 
-        const shareBtn = document.getElementById('share-btn');
-        if (shareBtn) {
-            shareBtn.addEventListener('click', () => {
-                const msgEl = document.getElementById('ai-message');
-                const textToShare = (msgEl ? msgEl.textContent : '') + " — MicroHabits AI Champions 3D Edition 3000 🚀";
-                navigator.clipboard.writeText(textToShare).then(() => {
-                    const originalText = shareBtn.textContent;
-                    shareBtn.textContent = "✅ Skopírované!";
+        const _shareBtn = document.getElementById('share-btn');
+        if (_shareBtn) {
+            _shareBtn.addEventListener('click', () => {
+                const _msgEl = document.getElementById('ai-message');
+                const _text = (_msgEl ? _msgEl.textContent : '') + " — MicroHabits AI Champions 3D Edition 3000 🚀";
+                navigator.clipboard.writeText(_text).then(() => {
+                    const _orig = _shareBtn.textContent;
+                    _shareBtn.textContent = "✅ Skopírované!";
                     setTimeout(() => {
-                        shareBtn.textContent = originalText;
+                        _shareBtn.textContent = _orig;
                     }, 2000);
                 });
             });
         }
 
-        const msgEl = document.getElementById('ai-message');
-        if (msgEl) msgEl.style.transition = 'opacity 0.15s ease-in-out';
+        const _msgEl = document.getElementById('ai-message');
+        if (_msgEl) _msgEl.style.transition = 'opacity 0.15s ease-in-out';
 
         function toggleReminderModal() {
-            const modal = document.getElementById('reminderModal');
-            if(modal) modal.classList.toggle('hidden');
-            const toggle = document.getElementById('reminderToggle');
-            const timeInput = document.getElementById('reminderTimeInput');
-            if(toggle) toggle.checked = reminderSettings.enabled;
-            if(timeInput) timeInput.value = reminderSettings.time;
+            const _modal = document.getElementById('reminderModal');
+            if(_modal) _modal.classList.toggle('hidden');
+            const _toggle = document.getElementById('reminderToggle');
+            const _timeInput = document.getElementById('reminderTimeInput');
+            if(_toggle) _toggle.checked = _0x112b.enabled;
+            if(_timeInput) _timeInput.value = _0x112b.time;
         }
 
         function toggleReminderSwitch() {
-            const toggle = document.getElementById('reminderToggle');
-            if(toggle) reminderSettings.enabled = toggle.checked;
-            updateReminderBadge();
+            const _toggle = document.getElementById('reminderToggle');
+            if(_toggle) _0x112b.enabled = _toggle.checked;
+            _0xupdBadge();
         }
 
         function saveReminderSettings() {
-            const toggle = document.getElementById('reminderToggle');
-            const timeInput = document.getElementById('reminderTimeInput');
-            if(toggle) reminderSettings.enabled = toggle.checked;
-            if(timeInput) reminderSettings.time = timeInput.value;
-            saveData();
-            updateReminderBadge();
+            const _toggle = document.getElementById('reminderToggle');
+            const _timeInput = document.getElementById('reminderTimeInput');
+            if(_toggle) _0x112b.enabled = _toggle.checked;
+            if(_timeInput) _0x112b.time = _timeInput.value;
+            _0x764d();
+            _0xupdBadge();
             toggleReminderModal();
 
-            if (reminderSettings.enabled && "Notification" in window) {
+            if (_0x112b.enabled && "Notification" in window) {
                 Notification.requestPermission();
             }
         }
 
-        function updateReminderBadge() {
-            const badge = document.getElementById('reminderActiveBadge');
-            if (!badge) return;
-            if (reminderSettings.enabled) badge.classList.remove('hidden');
-            else badge.classList.add('hidden');
+        function _0xupdBadge() {
+            const _badge = document.getElementById('reminderActiveBadge');
+            if (!_badge) return;
+            if (_0x112b.enabled) _badge.classList.remove('hidden');
+            else _badge.classList.add('hidden');
         }
 
         function testNotificationReminder() {
@@ -1172,28 +1167,27 @@
             }
         }
 
-        // 3D Canvas Particle Fireworks Engine
-        const canvas = document.getElementById('fireworksCanvas');
-        const ctx = canvas ? canvas.getContext('2d') : null;
-        let particles = [];
+        const _canvas = document.getElementById('fireworksCanvas');
+        const _ctx = _canvas ? _canvas.getContext('2d') : null;
+        let _particles = [];
 
-        function resizeCanvas() {
-            if (!canvas) return;
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+        function _resizeCanvas() {
+            if (!_canvas) return;
+            _canvas.width = window.innerWidth;
+            _canvas.height = window.innerHeight;
         }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
+        window.addEventListener('resize', _resizeCanvas);
+        _resizeCanvas();
 
-        class Particle {
+        class _Particle {
             constructor(x, y, color) {
                 this.x = x;
                 this.y = y;
                 this.color = color;
-                const angle = Math.random() * Math.PI * 2;
-                const speed = Math.random() * 8 + 2;
-                this.vx = Math.cos(angle) * speed;
-                this.vy = Math.sin(angle) * speed;
+                const _angle = Math.random() * Math.PI * 2;
+                const _speed = Math.random() * 8 + 2;
+                this.vx = Math.cos(_angle) * _speed;
+                this.vy = Math.sin(_angle) * _speed;
                 this.alpha = 1;
                 this.decay = Math.random() * 0.02 + 0.015;
                 this.gravity = 0.12;
@@ -1209,54 +1203,54 @@
             }
 
             draw() {
-                if (!ctx) return;
-                ctx.save();
-                ctx.globalAlpha = Math.max(0, this.alpha);
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, 3, 0, Math.PI * 2);
-                ctx.fillStyle = this.color;
-                ctx.shadowBlur = 10;
-                ctx.shadowColor = this.color;
-                ctx.fill();
-                ctx.restore();
+                if (!_ctx) return;
+                _ctx.save();
+                _ctx.globalAlpha = Math.max(0, this.alpha);
+                _ctx.beginPath();
+                _ctx.arc(this.x, this.y, 3, 0, Math.PI * 2);
+                _ctx.fillStyle = this.color;
+                _ctx.shadowBlur = 10;
+                _ctx.shadowColor = this.color;
+                _ctx.fill();
+                _ctx.restore();
             }
         }
 
         function trigger3DFireworks() {
-            if (!canvas) return;
-            const colors = ['#00f0ff', '#facc15', '#ff007f', '#7000ff', '#10b981'];
-            const burstCount = 6;
+            if (!_canvas) return;
+            const _colors = ['#00f0ff', '#facc15', '#ff007f', '#7000ff', '#10b981'];
+            const _burstCount = 6;
 
-            for (let i = 0; i < burstCount; i++) {
+            for (let i = 0; i < _burstCount; i++) {
                 setTimeout(() => {
-                    const x = Math.random() * canvas.width * 0.8 + canvas.width * 0.1;
-                    const y = Math.random() * canvas.height * 0.5 + canvas.height * 0.1;
-                    const color = colors[Math.floor(Math.random() * colors.length)];
+                    const _x = Math.random() * _canvas.width * 0.8 + _canvas.width * 0.1;
+                    const _y = Math.random() * _canvas.height * 0.5 + _canvas.height * 0.1;
+                    const _color = _colors[Math.floor(Math.random() * _colors.length)];
                     for (let p = 0; p < 70; p++) {
-                        particles.push(new Particle(x, y, color));
+                        _particles.push(new _Particle(_x, _y, _color));
                     }
                 }, i * 180);
             }
         }
 
-        function animateFireworks() {
-            if (ctx && canvas) {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                particles = particles.filter(p => p.alpha > 0);
-                particles.forEach(p => {
+        function _animateFireworks() {
+            if (_ctx && _canvas) {
+                _ctx.clearRect(0, 0, _canvas.width, _canvas.height);
+                _particles = _particles.filter(p => p.alpha > 0);
+                _particles.forEach(p => {
                     p.update();
                     p.draw();
                 });
             }
-            requestAnimationFrame(animateFireworks);
+            requestAnimationFrame(_animateFireworks);
         }
 
         window.onload = function() {
-            renderDaySelector();
-            saveAndRender();
-            runAiAnalysis();
-            updateReminderBadge();
-            animateFireworks();
+            _0x875e();
+            _0xb08b();
+            _0x153a();
+            _0xupdBadge();
+            _animateFireworks();
             syncMainNamesToCert();
         };
     </script>
@@ -1266,12 +1260,12 @@
       fetch('https://api.countapi.xyz/hit/microhabits-champions-vladimir190/visits')
         .then(res => res.json())
         .then(res => {
-          const vCount = document.getElementById('visit-count');
-          if(vCount) vCount.innerText = res.value;
+          const _vCount = document.getElementById('visit-count');
+          if(_vCount) _vCount.innerText = res.value;
         })
         .catch(() => {
-          const vCount = document.getElementById('visit-count');
-          if(vCount) vCount.innerText = '1';
+          const _vCount = document.getElementById('visit-count');
+          if(_vCount) _vCount.innerText = '1';
         });
     </script>
 </body>
