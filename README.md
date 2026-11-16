@@ -44,7 +44,12 @@ https://vladimir190-cmyk.github.io/microhabits-champions/
 GitHub Repozitár: 
 https://github.com/vladimir190-cmyk/microhabits-champions
 
-
+<p align="center">
+  <img src="3.png" alt="MicroHabits AI - Champions 3D Edition 3000 Preview" width="600px">
+</p>
+<p align="center">
+  <em>⚡ Next-Gen 3D Habit Protocol & AI Intelligence Dashboard ⚡</em>
+</p>
 
 <img width="346" height="413" alt="3" src="https://github.com/user-attachments/assets/f8ed1b47-bf7e-4c79-bfe0-ca3f12fe1028" />
 
