@@ -1,8 +1,15 @@
-MICROHABITS-CHAMPIONS 
-Budujte trvalé návyky, prekonávajte denné výzvy a staňte sa šampiónom vlastného rastu.
+# 🚀 MicroHabits AI - Champions 3D Edition 3000
 
+<p align="center">
+  <img src="3.png" alt="MicroHabits AI - Champions 3D Edition 3000 Preview" width="600px">
+</p>
+<p align="center">
+  <em>⚡ Next-Gen 3D Habit Protocol & AI Intelligence Dashboard ⚡</em>
+</p>
 
-O projekte
+---
+
+## 📌 O projekte
 
 Microhabits Champions je moderná a interaktívna webová aplikácia navrhnutá na budovanie mikronávykov (microhabits), gamifikáciu osobného rozvoja a každodennú motiváciu. 
 Projekt kombinuje čistý minimalistický dizajn s pokročilými webovými technológiami a interaktívnymi prvkami priamo vo vašom prehliadači.
